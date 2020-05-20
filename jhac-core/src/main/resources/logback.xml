@@ -1,0 +1,15 @@
+<configuration>
+
+    <appender name="console" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{1} %method - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <logger name="com.sap.hybris.hac" level="debug"/>
+    <logger name="com.sap.hybris.hac.util.StatefulRestTemplate" level="error"/>
+
+    <root level="error">
+        <appender-ref ref="console"/>
+    </root>
+</configuration>
