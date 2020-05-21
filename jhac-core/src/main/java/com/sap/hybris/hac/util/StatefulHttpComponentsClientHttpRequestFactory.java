@@ -7,6 +7,12 @@ import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 
 import java.net.URI;
 
+/**
+ * Supporting {@link HttpComponentsClientHttpRequestFactory} extension for {@link
+ * StatefulRestTemplate}.
+ *
+ * @author Klaus Hauschild
+ */
 public class StatefulHttpComponentsClientHttpRequestFactory
     extends HttpComponentsClientHttpRequestFactory {
 

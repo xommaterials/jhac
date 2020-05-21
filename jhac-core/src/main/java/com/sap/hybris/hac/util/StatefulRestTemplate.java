@@ -13,6 +13,11 @@ import org.springframework.web.client.RestTemplate;
 
 import javax.net.ssl.SSLContext;
 
+/**
+ * Stateful extension of {@link RestTemplate}.
+ *
+ * @author Klaus Hauschild
+ */
 public class StatefulRestTemplate extends RestTemplate {
 
   private final HttpClient httpClient;

@@ -8,6 +8,11 @@ import lombok.ToString;
 
 import java.util.Objects;
 
+/**
+ * Script. By default script type is set to <code>groovy</code> and commit mode is deactivated.
+ *
+ * @author Klaus Hauschild
+ */
 @Builder
 @Getter
 @ToString

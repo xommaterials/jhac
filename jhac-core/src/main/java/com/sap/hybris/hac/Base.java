@@ -5,6 +5,7 @@ import com.sap.hybris.hac.util.StatefulRestTemplate;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -18,17 +19,20 @@ import java.util.Map;
 
 import static java.util.Collections.singletonList;
 
+/**
+ * Base implementation for any endpoint providing shared functionality communicating with hac.
+ *
+ * @author Klaus Hauschild
+ */
 public abstract class Base<REQUEST extends Request, RESPONSE> {
 
   private final ObjectMapper MAPPER = new ObjectMapper();
 
-  private final Logger logger;
+  private final Logger logger = LoggerFactory.getLogger(getClass());
   private final Configuration configuration;
   private final Class<RESPONSE> responseType;
 
-  protected Base(
-      final Logger logger, final Configuration configuration, final Class<RESPONSE> responseType) {
-    this.logger = logger;
+  protected Base(final Configuration configuration, final Class<RESPONSE> responseType) {
     this.configuration = configuration;
     this.responseType = responseType;
   }
