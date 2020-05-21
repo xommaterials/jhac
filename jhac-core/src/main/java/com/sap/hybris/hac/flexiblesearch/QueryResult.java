@@ -1,12 +1,11 @@
 package com.sap.hybris.hac.flexiblesearch;
 
-import lombok.Getter;
-import lombok.ToString;
-
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
+import lombok.Getter;
+import lombok.ToString;
 
 /**
  * Flexible search / SQL query result.

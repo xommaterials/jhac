@@ -1,12 +1,11 @@
 package com.sap.hybris.hac.flexiblesearch;
 
 import com.sap.hybris.hac.Request;
+import java.util.Locale;
 import lombok.Builder;
 import lombok.Builder.Default;
 import lombok.Getter;
 import lombok.ToString;
-
-import java.util.Locale;
 
 /**
  * Flexible search / SQL query

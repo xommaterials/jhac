@@ -1,7 +1,10 @@
 package com.sap.hybris.hac;
 
+import static java.util.Collections.singletonList;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sap.hybris.hac.util.StatefulRestTemplate;
+import java.util.Map;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.slf4j.Logger;
@@ -14,10 +17,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
-
-import java.util.Map;
-
-import static java.util.Collections.singletonList;
 
 /**
  * Base implementation for any endpoint providing shared functionality communicating with hac.
