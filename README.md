@@ -45,6 +45,18 @@ hac()
 
 This will query all products from a local running Hybris instance.
 
+```
+hac()
+    .flexibleSearch()
+    .query(
+        FlexibleSearchQuery.builder()
+            .flexibleSearchQuery("SELECT COUNT(*) FROM { Product }")
+            .build())
+    count();
+```
+
+If you query for just a `COUNT` `QueryResult` has `count()` that will return the queried count.
+
 ## Impex
 
 Import or export data via impex.

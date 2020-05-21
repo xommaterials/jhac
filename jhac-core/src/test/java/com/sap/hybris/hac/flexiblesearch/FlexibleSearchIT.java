@@ -1,7 +1,5 @@
 package com.sap.hybris.hac.flexiblesearch;
 
-import org.hamcrest.CoreMatchers;
-import org.hamcrest.Matcher;
 import org.junit.Test;
 
 import static com.sap.hybris.hac.HybrisAdministrationConsole.hac;
