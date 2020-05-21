@@ -9,6 +9,7 @@
     <packaging>pom</packaging>
     <modules>
         <module>jhac-core</module>
+        <module>jhac-cli</module>
     </modules>
 
     <!-- Build Settings -->
