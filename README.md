@@ -1,4 +1,4 @@
-# Java client for SAP Hybris administration console
+# Java client for SAP Hybris administration console [![Build Status](https://travis-ci.org/klaushauschild1984/jhac.svg?branch=master)](https://travis-ci.org/klaushauschild1984/jhac)
 
 SAP Hybris offers with its administration console a powerful tool to
 * execute code
