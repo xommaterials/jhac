@@ -10,12 +10,12 @@ public class ScriptingIT {
 
   @Test
   public void groovyRocks() {
-    final ScriptResult result =
+    final ScriptResult result = //
         hac() //
             .scripting() //
-            .execute(
+            .execute( //
                 Script.builder() //
-                    .script(
+                    .script( //
                         "spring.beanDefinitionNames.each {\n" //
                             + "    println it\n" //
                             + "}\n" //

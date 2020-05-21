@@ -6,8 +6,6 @@ import lombok.Builder.Default;
 import lombok.Getter;
 import lombok.ToString;
 
-import java.util.Objects;
-
 /**
  * Script. By default script type is set to <code>groovy</code> and commit mode is deactivated.
  *
@@ -20,10 +18,15 @@ public class Script implements Request {
 
   private String script;
   @Default private ScriptType scriptType = ScriptType.groovy;
-  @Default private boolean commit = false;
+  private boolean commit;
 
   @Override
   public void validate() {
-    Objects.requireNonNull(script, "script must not be null");
+    if (script == null) {
+      throw new IllegalArgumentException("script must not be null");
+    }
+    if (scriptType == null) {
+      throw new IllegalArgumentException("scriptType must not be null");
+    }
   }
 }

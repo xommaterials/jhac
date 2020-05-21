@@ -34,6 +34,17 @@ If you manage to produce an execution result parsable into Java base types `Scri
 
 Query data via flexible search or directly via SQL.
 
+```
+hac()
+    .flexibleSearch()
+    .query(
+        FlexibleSearchQuery.builder()
+            .flexibleSearchQuery("SELECT * FROM { Product }")
+            .build());
+```
+
+This will query all products from a local running Hybris instance.
+
 ## Impex
 
 Import or export data via impex.
