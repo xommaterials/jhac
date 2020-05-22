@@ -61,6 +61,30 @@ If you query for just a `COUNT` `QueryResult` has `count()` that will return the
 
 Import or export data via impex.
 
+```
+hac()
+    .impex()
+    .importData(
+        Impex.builder()
+            .scriptContent(
+                "INSERT_UPDATE user; uid[unique = true]\n"
+                    + "; admin")
+            .buildImport());
+```
+
+Will import some data.
+
+```
+hac()
+    .impex()
+    .exportData(
+        Impex.builder()
+            .scriptContent("INSERT_UPDATE user; uid[unique = true]")
+            .buildExport());
+```
+
+Will export some data. Can be accessed via `impexResult.getExportResources()`.
+
 ## Maven dependency
 
 ![Release](https://jitpack.io/v/klaushauschild1984/jhac.svg)

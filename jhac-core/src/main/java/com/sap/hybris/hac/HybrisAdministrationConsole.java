@@ -1,7 +1,7 @@
 package com.sap.hybris.hac;
 
 import com.sap.hybris.hac.flexiblesearch.FlexibleSearch;
-import com.sap.hybris.hac.impex.Impex;
+import com.sap.hybris.hac.impex.ImportExport;
 import com.sap.hybris.hac.scripting.Scripting;
 
 /**
@@ -55,11 +55,11 @@ public class HybrisAdministrationConsole {
   }
 
   /**
-   * Impex endpoint.
+   * ImportExport endpoint.
    *
    * @return impex endpoint
    */
-  public Impex impex() {
-    return new Impex(configuration);
+  public ImportExport impex() {
+    return new ImportExport(configuration);
   }
 }

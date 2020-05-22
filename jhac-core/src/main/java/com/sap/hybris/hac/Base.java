@@ -1,10 +1,7 @@
 package com.sap.hybris.hac;
 
-import static java.util.Collections.singletonList;
-
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sap.hybris.hac.util.StatefulRestTemplate;
-import java.util.Map;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.slf4j.Logger;
@@ -18,6 +15,10 @@ import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
+import java.util.Map;
+
+import static java.util.Collections.singletonList;
+
 /**
  * Base implementation for any endpoint providing shared functionality communicating with hac.
  *
@@ -29,19 +30,45 @@ public abstract class Base<REQUEST, RESPONSE> {
 
   private final Logger logger = LoggerFactory.getLogger(getClass());
   private final Configuration configuration;
-  private final Class<RESPONSE> responseType;
+  private final Class<?> responseType;
 
-  protected Base(final Configuration configuration, final Class<RESPONSE> responseType) {
+  protected Base(final Configuration configuration, final Class<?> responseType) {
     this.configuration = configuration;
     this.responseType = responseType;
   }
 
+  protected Configuration configuration() {
+    return configuration;
+  }
+
   protected RESPONSE execute(final REQUEST request, final String path) {
+    return execute(request, path, "/execute");
+  }
+
+  protected RESPONSE execute(final REQUEST request, final String path, final String action) {
     logger.debug("Execute {}: {}", configuration.getEndpoint() + path, request);
 
+    final HttpHeaders requestHeaders = requestHeaders();
+    final RestTemplate restTemplate = prepareRestTemplate(requestHeaders, path);
+
+    final HttpEntity<MultiValueMap<String, Object>> requestEntity =
+        requestEntity(request, requestHeaders);
+    final ResponseEntity<RESPONSE> response =
+        (ResponseEntity<RESPONSE>)
+            restTemplate.exchange(
+                configuration.getEndpoint() + "/console" + path + action,
+                HttpMethod.POST,
+                requestEntity,
+                responseType);
+
+    final RESPONSE result = response.getBody();
+    logger.debug("Result: {}", result);
+    return result;
+  }
+
+  protected RestTemplate prepareRestTemplate(final HttpHeaders requestHeaders, final String path) {
     final RestTemplate restTemplate = new StatefulRestTemplate();
     authenticate(restTemplate);
-    final HttpHeaders requestHeaders = requestHeaders();
 
     final String url = configuration.getEndpoint() + "/console" + path;
     final ResponseEntity<String> executePageResponse =
@@ -49,14 +76,7 @@ public abstract class Base<REQUEST, RESPONSE> {
     final String csrfToken = extractCsrfToken(executePageResponse);
     requestHeaders.add("X-CSRF-TOKEN", csrfToken);
 
-    final HttpEntity<MultiValueMap<String, Object>> requestEntity =
-        requestEntity(request, requestHeaders);
-    final ResponseEntity<RESPONSE> response =
-        restTemplate.exchange(url + "/execute", HttpMethod.POST, requestEntity, responseType);
-
-    final RESPONSE result = response.getBody();
-    logger.debug("Result: {}", result);
-    return result;
+    return restTemplate;
   }
 
   private void authenticate(final RestTemplate restTemplate) {
