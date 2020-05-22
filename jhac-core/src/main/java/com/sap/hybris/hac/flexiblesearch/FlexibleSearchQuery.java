@@ -1,11 +1,8 @@
 package com.sap.hybris.hac.flexiblesearch;
 
-import static java.util.stream.Collectors.joining;
+import static com.sap.hybris.hac.util.InputStreamUtils.readLines;
 
-import java.io.BufferedReader;
-import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.util.Locale;
 import lombok.Builder;
 import lombok.Getter;
@@ -36,13 +33,8 @@ public class FlexibleSearchQuery {
     }
 
     FlexibleSearchQueryBuilder flexibleSearchQuery(final InputStream flexibleSearchQuery) {
-      try (final BufferedReader buffer =
-          new BufferedReader(new InputStreamReader(flexibleSearchQuery))) {
-        this.flexibleSearchQuery = buffer.lines().collect(joining("\n"));
-        return this;
-      } catch (final IOException exception) {
-        throw new IllegalArgumentException("unable to read flexible search suery", exception);
-      }
+      this.flexibleSearchQuery = readLines(flexibleSearchQuery, "flexible search query");
+      return this;
     }
 
     FlexibleSearchQueryBuilder sqlQuery(final String sqlQuery) {
@@ -51,12 +43,8 @@ public class FlexibleSearchQuery {
     }
 
     FlexibleSearchQueryBuilder sqlQuery(final InputStream sqlQuery) {
-      try (final BufferedReader buffer = new BufferedReader(new InputStreamReader(sqlQuery))) {
-        this.sqlQuery = buffer.lines().collect(joining("\n"));
-        return this;
-      } catch (final IOException exception) {
-        throw new IllegalArgumentException("unable to read sql query", exception);
-      }
+      this.sqlQuery = readLines(sqlQuery, "sql query");
+      return this;
     }
 
     FlexibleSearchQuery build() {

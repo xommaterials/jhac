@@ -1,11 +1,8 @@
 package com.sap.hybris.hac.scripting;
 
-import static java.util.stream.Collectors.joining;
+import static com.sap.hybris.hac.util.InputStreamUtils.readLines;
 
-import java.io.BufferedReader;
-import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.ToString;
@@ -32,12 +29,8 @@ public class Script {
     }
 
     ScriptBuilder script(final InputStream script) {
-      try (final BufferedReader buffer = new BufferedReader(new InputStreamReader(script))) {
-        this.script = buffer.lines().collect(joining("\n"));
-        return this;
-      } catch (final IOException exception) {
-        throw new IllegalArgumentException("unable to read script", exception);
-      }
+      this.script = readLines(script, "script");
+      return this;
     }
 
     Script build() {

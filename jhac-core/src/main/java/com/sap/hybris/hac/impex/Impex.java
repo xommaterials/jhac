@@ -1,5 +1,8 @@
 package com.sap.hybris.hac.impex;
 
+import static com.sap.hybris.hac.util.InputStreamUtils.readLines;
+
+import java.io.InputStream;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.ToString;
@@ -24,6 +27,16 @@ public class Impex {
   private Boolean _sldEnabled;
 
   static class ImpexBuilder {
+
+    ImpexBuilder scriptContent(final String scriptContent) {
+      this.scriptContent = scriptContent;
+      return this;
+    }
+
+    ImpexBuilder scriptContent(final InputStream scriptContent) {
+      this.scriptContent = readLines(scriptContent, "script content");
+      return this;
+    }
 
     Impex buildImport() {
       return build(Validation.IMPORT_STRICT);
