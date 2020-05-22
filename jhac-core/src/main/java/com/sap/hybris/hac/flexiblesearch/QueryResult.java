@@ -45,7 +45,7 @@ public class QueryResult {
   }
 
   /**
-   * Convenience method to receive every result entry as association list (header -> value).
+   * Convenience method to receive every result entry as association list (header -&gt; value).
    *
    * @return result as association lists
    */

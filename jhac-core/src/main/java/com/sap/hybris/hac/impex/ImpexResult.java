@@ -1,10 +1,9 @@
 package com.sap.hybris.hac.impex;
 
+import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.ToString;
-
-import java.util.List;
 
 /**
  * Import / export result.

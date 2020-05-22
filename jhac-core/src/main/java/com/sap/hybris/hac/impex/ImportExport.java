@@ -1,7 +1,11 @@
 package com.sap.hybris.hac.impex;
 
+import static java.util.Collections.emptyList;
+
 import com.sap.hybris.hac.Base;
 import com.sap.hybris.hac.Configuration;
+import java.util.List;
+import java.util.stream.Collectors;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -10,11 +14,6 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
-
-import java.util.List;
-import java.util.stream.Collectors;
-
-import static java.util.Collections.emptyList;
 
 /**
  * Import / export endpoint.
