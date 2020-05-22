@@ -1,31 +1,36 @@
 package com.sap.hybris.hac.flexiblesearch;
 
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.nullValue;
+import static org.hamcrest.MatcherAssert.assertThat;
+
+import java.util.Locale;
 import org.junit.Test;
 
 public class FlexibleSearchQueryTest {
 
   @Test(expected = IllegalArgumentException.class)
-  public void nullFlexibleSearchSQLQuery() {
-    FlexibleSearchQuery.builder().flexibleSearchQuery(null).sqlQuery(null).build().validate();
+  public void flexibleSearchAndSqlAreNull() {
+    FlexibleSearchQuery.builder()
+        .flexibleSearchQuery((String) null)
+        .sqlQuery((String) null)
+        .build();
   }
 
   @Test(expected = IllegalArgumentException.class)
-  public void noneNullFlexibleSearchSQLQuery() {
-    FlexibleSearchQuery.builder().flexibleSearchQuery("").sqlQuery("").build().validate();
+  public void flexibleSearchAndSqlAreFilled() {
+    FlexibleSearchQuery.builder().flexibleSearchQuery("flexibleSearch").sqlQuery("sql").build();
   }
 
-  @Test(expected = IllegalArgumentException.class)
-  public void negativeMaxCount() {
-    FlexibleSearchQuery.builder().flexibleSearchQuery("").maxCount(-1).build().validate();
-  }
-
-  @Test(expected = IllegalArgumentException.class)
-  public void nullUser() {
-    FlexibleSearchQuery.builder().flexibleSearchQuery("").user(null).build().validate();
-  }
-
-  @Test(expected = IllegalArgumentException.class)
-  public void nullLocale() {
-    FlexibleSearchQuery.builder().flexibleSearchQuery("").locale(null).build().validate();
+  @Test
+  public void defaultValues() {
+    final FlexibleSearchQuery flexibleSearch =
+        FlexibleSearchQuery.builder().flexibleSearchQuery("flexibleSearch").build();
+    assertThat(flexibleSearch.getFlexibleSearchQuery(), is("flexibleSearch"));
+    assertThat(flexibleSearch.getSqlQuery(), is(nullValue()));
+    assertThat(flexibleSearch.getMaxCount(), is(200));
+    assertThat(flexibleSearch.getUser(), is("admin"));
+    assertThat(flexibleSearch.getLocale(), is(Locale.ENGLISH));
+    assertThat(flexibleSearch.isCommit(), is(false));
   }
 }

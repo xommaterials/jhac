@@ -23,7 +23,7 @@ import org.springframework.web.client.RestTemplate;
  *
  * @author Klaus Hauschild
  */
-public abstract class Base<REQUEST extends Request, RESPONSE> {
+public abstract class Base<REQUEST, RESPONSE> {
 
   private final ObjectMapper MAPPER = new ObjectMapper();
 
@@ -37,8 +37,6 @@ public abstract class Base<REQUEST extends Request, RESPONSE> {
   }
 
   protected RESPONSE execute(final REQUEST request, final String path) {
-    request.validate();
-
     logger.debug("Execute {}: {}", configuration.getEndpoint() + path, request);
 
     final RestTemplate restTemplate = new StatefulRestTemplate();

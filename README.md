@@ -81,3 +81,13 @@ Import or export data via impex.
     </dependency>
 </dependencies>
 ```
+
+## Command line interface
+
+Build on top of java client there is a command line interface providing a productive tool for daily tasks.
+
+_TODO_
+
+## Interactive user interface
+
+_TODO_

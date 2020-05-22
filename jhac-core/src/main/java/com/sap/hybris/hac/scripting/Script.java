@@ -1,8 +1,12 @@
 package com.sap.hybris.hac.scripting;
 
-import com.sap.hybris.hac.Request;
+import static java.util.stream.Collectors.joining;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import lombok.Builder;
-import lombok.Builder.Default;
 import lombok.Getter;
 import lombok.ToString;
 
@@ -11,22 +15,44 @@ import lombok.ToString;
  *
  * @author Klaus Hauschild
  */
-@Builder
+@Builder(builderClassName = "ScriptBuilder")
 @Getter
 @ToString
-public class Script implements Request {
+public class Script {
 
   private String script;
-  @Default private ScriptType scriptType = ScriptType.groovy;
+  private ScriptType scriptType;
   private boolean commit;
 
-  @Override
-  public void validate() {
-    if (script == null) {
-      throw new IllegalArgumentException("script must not be null");
+  static class ScriptBuilder {
+
+    ScriptBuilder script(final String script) {
+      this.script = script;
+      return this;
     }
-    if (scriptType == null) {
-      throw new IllegalArgumentException("scriptType must not be null");
+
+    ScriptBuilder script(final InputStream script) {
+      try (final BufferedReader buffer = new BufferedReader(new InputStreamReader(script))) {
+        this.script = buffer.lines().collect(joining("\n"));
+        return this;
+      } catch (final IOException exception) {
+        throw new IllegalArgumentException("unable to read script", exception);
+      }
+    }
+
+    Script build() {
+      // validation
+      if (script == null) {
+        throw new IllegalArgumentException("script must not be null");
+      }
+
+      // default values
+      if (scriptType == null) {
+        scriptType = ScriptType.groovy;
+      }
+
+      // build
+      return new Script(script, scriptType, commit);
     }
   }
 }

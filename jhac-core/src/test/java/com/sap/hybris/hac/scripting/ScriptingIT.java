@@ -31,7 +31,7 @@ public class ScriptingIT {
             .scripting() //
             .execute( //
                 Script.builder() //
-                    .script("foobar") //
+                    .script("invalid") //
                     .build());
     assertThat(result.hasError(), is(true));
   }

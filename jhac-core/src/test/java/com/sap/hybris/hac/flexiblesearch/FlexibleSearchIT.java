@@ -43,7 +43,7 @@ public class FlexibleSearchIT {
             .flexibleSearch() //
             .query( //
                 FlexibleSearchQuery.builder() //
-                    .flexibleSearchQuery("foobar") //
+                    .flexibleSearchQuery("invalid") //
                     .build());
     assertThat(result.hasError(), is(true));
   }

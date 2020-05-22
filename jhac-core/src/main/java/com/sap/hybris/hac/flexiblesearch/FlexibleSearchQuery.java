@@ -1,9 +1,13 @@
 package com.sap.hybris.hac.flexiblesearch;
 
-import com.sap.hybris.hac.Request;
+import static java.util.stream.Collectors.joining;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.Locale;
 import lombok.Builder;
-import lombok.Builder.Default;
 import lombok.Getter;
 import lombok.ToString;
 
@@ -12,34 +16,72 @@ import lombok.ToString;
  *
  * @author Klaus Hauschild
  */
-@Builder
+@Builder(builderClassName = "FlexibleSearchQueryBuilder")
 @Getter
 @ToString
-public class FlexibleSearchQuery implements Request {
+public class FlexibleSearchQuery {
 
   private String flexibleSearchQuery;
   private String sqlQuery;
-  @Default private int maxCount = 200;
-  @Default private String user = "admin";
-  @Default private Locale locale = Locale.ENGLISH;
+  private int maxCount;
+  private String user;
+  private Locale locale;
   private boolean commit;
 
-  @Override
-  public void validate() {
-    if (flexibleSearchQuery == null && sqlQuery == null) {
-      throw new IllegalArgumentException("either flexibleSearchQuery or sqlQuery must not be null");
+  static class FlexibleSearchQueryBuilder {
+
+    FlexibleSearchQueryBuilder flexibleSearchQuery(final String flexibleSearchQuery) {
+      this.flexibleSearchQuery = flexibleSearchQuery;
+      return this;
     }
-    if (flexibleSearchQuery != null && sqlQuery != null) {
-      throw new IllegalArgumentException("either flexibleSearchQuery or sqlQuery must be used");
+
+    FlexibleSearchQueryBuilder flexibleSearchQuery(final InputStream flexibleSearchQuery) {
+      try (final BufferedReader buffer =
+          new BufferedReader(new InputStreamReader(flexibleSearchQuery))) {
+        this.flexibleSearchQuery = buffer.lines().collect(joining("\n"));
+        return this;
+      } catch (final IOException exception) {
+        throw new IllegalArgumentException("unable to read flexible search suery", exception);
+      }
     }
-    if (maxCount <= 0) {
-      throw new IllegalArgumentException("maxCount must be positive");
+
+    FlexibleSearchQueryBuilder sqlQuery(final String sqlQuery) {
+      this.sqlQuery = sqlQuery;
+      return this;
     }
-    if (user == null) {
-      throw new IllegalArgumentException("user must not be null");
+
+    FlexibleSearchQueryBuilder sqlQuery(final InputStream sqlQuery) {
+      try (final BufferedReader buffer = new BufferedReader(new InputStreamReader(sqlQuery))) {
+        this.sqlQuery = buffer.lines().collect(joining("\n"));
+        return this;
+      } catch (final IOException exception) {
+        throw new IllegalArgumentException("unable to read sql query", exception);
+      }
     }
-    if (locale == null) {
-      throw new IllegalArgumentException("locale must not be null");
+
+    FlexibleSearchQuery build() {
+      // validation
+      if (flexibleSearchQuery == null && sqlQuery == null) {
+        throw new IllegalArgumentException(
+            "either flexibleSearchQuery or sqlQuery must not be null");
+      }
+      if (flexibleSearchQuery != null && sqlQuery != null) {
+        throw new IllegalArgumentException("either flexibleSearchQuery or sqlQuery must be used");
+      }
+
+      // default values
+      if (maxCount <= 0) {
+        maxCount = 200;
+      }
+      if (user == null) {
+        user = "admin";
+      }
+      if (locale == null) {
+        locale = Locale.ENGLISH;
+      }
+
+      // build
+      return new FlexibleSearchQuery(flexibleSearchQuery, sqlQuery, maxCount, user, locale, commit);
     }
   }
 }
