@@ -1,14 +1,33 @@
 <!DOCTYPE html>
 <html>
-
 <head>
-    <title>Loading ...</title>
+    <style>
+        .container {
+            height: 280px;
+            position: relative;
+            background: url('background.png') repeat-x scroll 0 0 #4B5367;
+            overflow: hidden;
+        }
+
+        .center {
+            margin: 0;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            -ms-transform: translate(-50%, -50%);
+            transform: translate(-50%, -50%);
+        }
+    </style>
 </head>
+<body class="container">
 
-<body>
-<div style="display: flex; width: 100%; height: 100%;justify-content: center;align-items: center; overflow: hidden;">
-    <h1>Your loading animation ...</h1>
+
+<div class="center">
+    <img src="hac.png" alt="hac">
+    <br>
+    <h1 style="color: white; text-align: center">loading...</h1>
 </div>
-</body>
 
+
+</body>
 </html>

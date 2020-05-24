@@ -13,8 +13,8 @@ const showApplication = function (appUrl) {
     mainWindow = new BrowserWindow({
         title: applicationName
         , show: false
-        , width: 1200
-        , height: 800
+        , width: 800
+        , height: 600
         , frame: true
     });
     mainWindow.setMenu(null);
@@ -158,7 +158,7 @@ const showLoadingScreen = function () {
         show: true
         , frame: false
         , width: 500
-        , height: 280
+        , height: 300
     });
     loading.loadURL('file://' + app.getAppPath() + '/loading.html');
 };
