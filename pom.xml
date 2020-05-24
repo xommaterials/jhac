@@ -10,6 +10,7 @@
     <modules>
         <module>jhac-core</module>
         <module>jhac-cli</module>
+        <module>jhac-ui</module>
     </modules>
 
     <!-- Build Settings -->

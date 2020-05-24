@@ -4,6 +4,8 @@
 
     <!-- The Basics -->
     <artifactId>jhac-cli</artifactId>
+    <groupId>com.sap.hybris.hac</groupId>
+    <version>1.0-SNAPSHOT</version>
     <dependencies>
         <!-- hac client -->
         <dependency>
@@ -27,11 +29,6 @@
             <scope>test</scope>
         </dependency>
     </dependencies>
-    <parent>
-        <artifactId>jhac</artifactId>
-        <groupId>com.sap.hybris.hac</groupId>
-        <version>1.0-SNAPSHOT</version>
-    </parent>
     <properties>
         <java.version>11</java.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
