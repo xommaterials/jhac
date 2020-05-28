@@ -15,6 +15,7 @@ import picocli.CommandLine.Parameters;
 import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.concurrent.Callable;
@@ -24,33 +25,29 @@ import static com.sap.hybris.hac.HybrisAdministrationConsole.hac;
 @Command(name = "jhac-cli", version = "jhac-cli 1.0")
 public class HacCli implements Callable<Integer> {
 
+  private static CommandLine commandLine;
   @Option(
       names = {"-v", "--version"},
       versionHelp = true,
       description = "display version info")
   private boolean versionInfoRequested;
-
   @Option(
       names = {"-h", "--help"},
       usageHelp = true,
       description = "display this help message")
   private boolean usageHelpRequested;
-
   @ArgGroup private ConfigurationGroup configuration;
-
   @Option(names = "--commit", description = "commit changes")
   private boolean commit;
-
   @Option(names = "--debug")
   private boolean debug;
-
   @Parameters(
       description =
           "file to process\n  .groovy -> scripting\n  .fxs -> flexible search\n  .sql -> SQL\n  .import -> Impex import\n  .export -> Impex export")
   private File file;
 
   public static void main(final String[] args) {
-    final CommandLine commandLine = new CommandLine(new HacCli());
+    commandLine = new CommandLine(new HacCli());
     commandLine.parseArgs(args);
     if (commandLine.isUsageHelpRequested()) {
       commandLine.usage(System.out);
@@ -67,6 +64,9 @@ public class HacCli implements Callable<Integer> {
   public Integer call() throws Exception {
     try {
       final Configuration configuration = buildConfiguration();
+      if (!file.exists() || !file.canRead()) {
+        throw new FileNotFoundException("file not found or readable: " + file);
+      }
       final String extension = FilenameUtils.getExtension(file.getName());
       switch (extension.toLowerCase()) {
         case "groovy":
