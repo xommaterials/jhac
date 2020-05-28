@@ -20,7 +20,7 @@ public class ConfigurationTest {
   @Test
   public void fromFile() {
     final InputStream inputStream = getClass().getResourceAsStream("configuration.json");
-    final Configuration configuration = Configuration.builder().from(inputStream);
+    final Configuration configuration = Configuration.builder().from(inputStream).build();
     assertThat(configuration.getEndpoint(), is("endpoint"));
     assertThat(configuration.getUsername(), is("username"));
     assertThat(configuration.getPassword(), is("password"));

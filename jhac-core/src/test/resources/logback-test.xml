@@ -12,4 +12,5 @@
     <root level="error">
         <appender-ref ref="console"/>
     </root>
+
 </configuration>

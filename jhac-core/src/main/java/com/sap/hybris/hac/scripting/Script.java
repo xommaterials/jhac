@@ -21,19 +21,19 @@ public class Script {
   private ScriptType scriptType;
   private boolean commit;
 
-  static class ScriptBuilder {
+  public static class ScriptBuilder {
 
-    ScriptBuilder script(final String script) {
+    public ScriptBuilder script(final String script) {
       this.script = script;
       return this;
     }
 
-    ScriptBuilder script(final InputStream script) {
+    public ScriptBuilder script(final InputStream script) {
       this.script = readLines(script, "script");
       return this;
     }
 
-    Script build() {
+    public Script build() {
       // validation
       if (script == null) {
         throw new IllegalArgumentException("script must not be null");

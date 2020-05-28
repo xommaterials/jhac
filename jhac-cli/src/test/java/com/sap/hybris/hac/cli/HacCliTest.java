@@ -2,7 +2,7 @@ package com.sap.hybris.hac.cli;
 
 import org.junit.Test;
 
-public class HacCliIT {
+public class HacCliTest {
 
   @Test
   public void version() {

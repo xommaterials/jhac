@@ -35,18 +35,22 @@ public class Configuration {
     this.password = password;
   }
 
-  static class ConfigurationBuilder {
+  static public class ConfigurationBuilder {
 
-    Configuration from(final InputStream inputStream) {
+    public ConfigurationBuilder from(final InputStream inputStream) {
       final ObjectMapper objectMapper = new ObjectMapper();
       try {
-        return objectMapper.readValue(inputStream, Configuration.class);
+        final Configuration configuration = objectMapper.readValue(inputStream, Configuration.class);
+        endpoint = configuration.endpoint;
+        username = configuration.username;
+        password = configuration.password;
+        return this;
       } catch (final IOException exception) {
         throw new IllegalArgumentException("unable to read configuration");
       }
     }
 
-    Configuration build() {
+    public Configuration build() {
       // default values
       if (endpoint == null) {
         endpoint = "https://localhost:9002/hac";
