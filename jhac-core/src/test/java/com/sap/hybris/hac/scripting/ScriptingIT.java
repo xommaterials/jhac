@@ -22,6 +22,7 @@ public class ScriptingIT {
                             + "return \"Groovy Rocks!\"") //
                     .build());
     assertThat(result.hasError(), is(false));
+    assertThat(result.getExecutionResult(), is("Groovy Rocks!"));
   }
 
   @Test
