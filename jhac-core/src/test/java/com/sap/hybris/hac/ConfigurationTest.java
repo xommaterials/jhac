@@ -13,8 +13,8 @@ public class ConfigurationTest {
   public void defaultValues() {
     final Configuration configuration = Configuration.builder().build();
     assertThat(configuration.getEndpoint(), is("https://localhost:9002/hac"));
-    assertThat(configuration.getUsername(), is("admin"));
-    assertThat(configuration.getPassword(), is("nimda"));
+    assertThat(configuration.getCredentials().getUsername(), is("admin"));
+    assertThat(configuration.getCredentials().getPassword(), is("nimda"));
   }
 
   @Test
@@ -22,7 +22,7 @@ public class ConfigurationTest {
     final InputStream inputStream = getClass().getResourceAsStream("configuration.json");
     final Configuration configuration = Configuration.builder().from(inputStream).build();
     assertThat(configuration.getEndpoint(), is("endpoint"));
-    assertThat(configuration.getUsername(), is("username"));
-    assertThat(configuration.getPassword(), is("password"));
+    assertThat(configuration.getCredentials().getUsername(), is("username"));
+    assertThat(configuration.getCredentials().getPassword(), is("password"));
   }
 }

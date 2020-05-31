@@ -3,6 +3,7 @@ package com.sap.hybris.hac;
 import static java.util.Collections.singletonList;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.sap.hybris.hac.Configuration.Credentials;
 import com.sap.hybris.hac.util.StatefulRestTemplate;
 import java.util.Map;
 import org.jsoup.Jsoup;
@@ -84,13 +85,14 @@ public abstract class Base<REQUEST, RESPONSE> {
     final String csrfToken = extractCsrfToken(loginPageResponse);
 
     logger.debug("    CSRF: {}", csrfToken);
-    logger.debug("    user: {}", configuration.getUsername());
-    logger.debug("password: {}", configuration.getPassword().replaceAll(".", "*"));
+    final Credentials credentials = configuration.getCredentials();
+    logger.debug("    user: {}", credentials.getUsername());
+    logger.debug("password: {}", credentials.getPassword().replaceAll(".", "*"));
 
     final MultiValueMap<String, String> loginRequest = new LinkedMultiValueMap<>();
     loginRequest.put("_csrf", singletonList(csrfToken));
-    loginRequest.put("j_username", singletonList(configuration.getUsername()));
-    loginRequest.put("j_password", singletonList(configuration.getPassword()));
+    loginRequest.put("j_username", singletonList(credentials.getUsername()));
+    loginRequest.put("j_password", singletonList(credentials.getPassword()));
     loginRequest.put("_spring_security_remember_me", singletonList("on"));
     final HttpHeaders headers = requestHeaders();
     restTemplate.postForEntity(

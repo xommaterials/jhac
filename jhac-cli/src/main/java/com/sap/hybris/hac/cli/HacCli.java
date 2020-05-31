@@ -26,21 +26,27 @@ import static com.sap.hybris.hac.HybrisAdministrationConsole.hac;
 public class HacCli implements Callable<Integer> {
 
   private static CommandLine commandLine;
+
   @Option(
       names = {"-v", "--version"},
       versionHelp = true,
       description = "display version info")
   private boolean versionInfoRequested;
+
   @Option(
       names = {"-h", "--help"},
       usageHelp = true,
       description = "display this help message")
   private boolean usageHelpRequested;
+
   @ArgGroup private ConfigurationGroup configuration;
+
   @Option(names = "--commit", description = "commit changes")
   private boolean commit;
+
   @Option(names = "--debug")
   private boolean debug;
+
   @Parameters(
       description =
           "file to process\n  .groovy -> scripting\n  .fxs -> flexible search\n  .sql -> SQL\n  .import -> Impex import\n  .export -> Impex export")
@@ -134,8 +140,11 @@ public class HacCli implements Callable<Integer> {
       }
     } else if (configuration != null && configuration.configurationParams != null) {
       builder.endpoint(configuration.configurationParams.endpoint);
-      builder.username(configuration.configurationParams.username);
-      builder.password(configuration.configurationParams.password);
+      builder.credentials(
+          Configuration.Credentials.builder() //
+              .username(configuration.configurationParams.username) //
+              .password(configuration.configurationParams.password) //
+              .build());
     }
     return builder.build();
   }

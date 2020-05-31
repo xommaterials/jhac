@@ -23,30 +23,27 @@ import java.io.InputStream;
 public class Configuration {
 
   private String endpoint;
-  private String username;
-  private String password;
+  private Credentials credentials;
 
-  private Configuration() {
-  }
+  private Configuration() {}
 
-  private Configuration(final String endpoint, final String username, final String password) {
+  private Configuration(final String endpoint, final Credentials credentials) {
     this.endpoint = endpoint;
-    this.username = username;
-    this.password = password;
+    this.credentials = credentials;
   }
 
-  static public class ConfigurationBuilder {
+  public static class ConfigurationBuilder {
 
     public ConfigurationBuilder from(final InputStream inputStream) {
       final ObjectMapper objectMapper = new ObjectMapper();
       try {
-        final Configuration configuration = objectMapper.readValue(inputStream, Configuration.class);
+        final Configuration configuration =
+            objectMapper.readValue(inputStream, Configuration.class);
         endpoint = configuration.endpoint;
-        username = configuration.username;
-        password = configuration.password;
+        credentials = configuration.credentials;
         return this;
       } catch (final IOException exception) {
-        throw new IllegalArgumentException("unable to read configuration");
+        throw new IllegalArgumentException("unable to read configuration", exception);
       }
     }
 
@@ -55,15 +52,31 @@ public class Configuration {
       if (endpoint == null) {
         endpoint = "https://localhost:9002/hac";
       }
-      if (username == null) {
-        username = "admin";
-      }
-      if (password == null) {
-        password = "nimda";
+      if (credentials == null) {
+        credentials =
+            Credentials.builder() //
+                .username("admin") //
+                .password("nimda") //
+                .build();
       }
 
       // build
-      return new Configuration(endpoint, username, password);
+      return new Configuration(endpoint, credentials);
+    }
+  }
+
+  @Builder
+  @Getter
+  public static class Credentials {
+
+    private String username;
+    private String password;
+
+    private Credentials() {}
+
+    private Credentials(final String username, final String password) {
+      this.username = username;
+      this.password = password;
     }
   }
 }
