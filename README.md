@@ -110,7 +110,33 @@ Will export some data. Can be accessed via `impexResult.getExportResources()`.
 
 Build on top of java client there is a command line interface providing a productive tool for daily tasks.
 
-_TODO_
+```
+Usage: jhac-cli [-C=<configurationFile> | [-e=<endpoint> -u=<username>
+                -p=<password>]] [-hv] [--commit] [--debug] <file>
+      <file>                 file to process
+                               .groovy -> scripting
+                               .fxs -> flexible search
+                               .sql -> SQL
+                               .import -> Impex import
+                               .export -> Impex export
+  -C, -configuration=<configurationFile>
+                             configuration file
+      --commit               commit changes
+      --debug
+  -e, -endpoint=<endpoint>
+  -h, --help                 display this help message
+  -p, -password=<password>
+  -u, -username=<username>
+  -v, --version              display version info
+```
+
+You can either pass configuration as separate parameters or prepare a configuration JSON to specify targeted endpoint
+and your credentials. Commit mode is defaulted to `false` but can be activated with `--commit`. If you need detailed
+information activate debugging with `--debug`.
+
+For simplicity the actual called endpoint (scripting, flexible search or impex) is derived from extension of given processing file.
+
+There is no option to write the output to a file, but you can easily pipe it into a file with `>` and `&>`.
 
 ## Interactive user interface
 
