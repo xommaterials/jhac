@@ -1,7 +1,9 @@
 {
     "endpoint": "endpoint",
-    "credentials": {
-        "username": "username",
-        "password": "password"
+    "username": "username",
+    "password": "password",
+    "htaccess": {
+        "username": "htusername",
+        "password": "htpassword"
     }
 }

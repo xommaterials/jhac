@@ -18,18 +18,19 @@ import java.io.InputStream;
  *
  * @author Klaus Hauschild
  */
-@Builder
 @Getter
-public class Configuration {
+public class Configuration extends Credentials {
 
   private String endpoint;
-  private Credentials credentials;
+  private Credentials htaccess;
 
   private Configuration() {}
 
-  private Configuration(final String endpoint, final Credentials credentials) {
+  @Builder
+  private Configuration(final String endpoint, final String username, final String password, final Credentials htaccess) {
+    super(username, password);
     this.endpoint = endpoint;
-    this.credentials = credentials;
+    this.htaccess = htaccess;
   }
 
   public static class ConfigurationBuilder {
@@ -40,7 +41,9 @@ public class Configuration {
         final Configuration configuration =
             objectMapper.readValue(inputStream, Configuration.class);
         endpoint = configuration.endpoint;
-        credentials = configuration.credentials;
+        username = configuration.username;
+        password = configuration.password;
+        htaccess = configuration.htaccess;
         return this;
       } catch (final IOException exception) {
         throw new IllegalArgumentException("unable to read configuration", exception);
@@ -52,31 +55,15 @@ public class Configuration {
       if (endpoint == null) {
         endpoint = "https://localhost:9002/hac";
       }
-      if (credentials == null) {
-        credentials =
-            Credentials.builder() //
-                .username("admin") //
-                .password("nimda") //
-                .build();
+      if (username == null) {
+        username = "admin";
+      }
+      if (password == null) {
+        password = "nimda";
       }
 
       // build
-      return new Configuration(endpoint, credentials);
-    }
-  }
-
-  @Builder
-  @Getter
-  public static class Credentials {
-
-    private String username;
-    private String password;
-
-    private Credentials() {}
-
-    private Credentials(final String username, final String password) {
-      this.username = username;
-      this.password = password;
+      return new Configuration(endpoint, username, password, htaccess);
     }
   }
 }

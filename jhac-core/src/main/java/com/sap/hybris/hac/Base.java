@@ -1,11 +1,7 @@
 package com.sap.hybris.hac;
 
-import static java.util.Collections.singletonList;
-
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.sap.hybris.hac.Configuration.Credentials;
 import com.sap.hybris.hac.util.StatefulRestTemplate;
-import java.util.Map;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.slf4j.Logger;
@@ -18,6 +14,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
+
+import java.nio.charset.StandardCharsets;
+import java.util.Map;
+
+import static java.util.Collections.singletonList;
 
 /**
  * Base implementation for any endpoint providing shared functionality communicating with hac.
@@ -81,18 +82,21 @@ public abstract class Base<REQUEST, RESPONSE> {
 
   private void authenticate(final RestTemplate restTemplate) {
     final ResponseEntity<String> loginPageResponse =
-        restTemplate.getForEntity(configuration.getEndpoint(), String.class);
+        restTemplate.exchange(
+            configuration.getEndpoint(),
+            HttpMethod.GET,
+            new HttpEntity<String>(requestHeaders()),
+            String.class);
     final String csrfToken = extractCsrfToken(loginPageResponse);
 
     logger.debug("    CSRF: {}", csrfToken);
-    final Credentials credentials = configuration.getCredentials();
-    logger.debug("    user: {}", credentials.getUsername());
-    logger.debug("password: {}", credentials.getPassword().replaceAll(".", "*"));
+    logger.debug("    user: {}", configuration.getUsername());
+    logger.debug("password: {}", configuration.getPassword().replaceAll(".", "*"));
 
     final MultiValueMap<String, String> loginRequest = new LinkedMultiValueMap<>();
     loginRequest.put("_csrf", singletonList(csrfToken));
-    loginRequest.put("j_username", singletonList(credentials.getUsername()));
-    loginRequest.put("j_password", singletonList(credentials.getPassword()));
+    loginRequest.put("j_username", singletonList(configuration.getUsername()));
+    loginRequest.put("j_password", singletonList(configuration.getPassword()));
     loginRequest.put("_spring_security_remember_me", singletonList("on"));
     final HttpHeaders headers = requestHeaders();
     restTemplate.postForEntity(
@@ -109,6 +113,11 @@ public abstract class Base<REQUEST, RESPONSE> {
   private HttpHeaders requestHeaders() {
     final HttpHeaders requestHeaders = new HttpHeaders();
     requestHeaders.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
+    final Credentials htaccess = configuration.getHtaccess();
+    if (htaccess != null) {
+      requestHeaders.setBasicAuth(
+          htaccess.getUsername(), htaccess.getPassword(), StandardCharsets.UTF_8);
+    }
     return requestHeaders;
   }
 

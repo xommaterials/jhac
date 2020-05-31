@@ -139,12 +139,10 @@ public class HacCli implements Callable<Integer> {
             "Unable to load configuration file: " + configuration.configurationFile);
       }
     } else if (configuration != null && configuration.configurationParams != null) {
-      builder.endpoint(configuration.configurationParams.endpoint);
-      builder.credentials(
-          Configuration.Credentials.builder() //
-              .username(configuration.configurationParams.username) //
-              .password(configuration.configurationParams.password) //
-              .build());
+      builder
+          .endpoint(configuration.configurationParams.endpoint) //
+          .username(configuration.configurationParams.username) //
+          .password(configuration.configurationParams.password);
     }
     return builder.build();
   }

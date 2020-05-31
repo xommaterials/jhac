@@ -5,6 +5,7 @@ import org.junit.Test;
 import java.io.InputStream;
 
 import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
 
 public class ConfigurationTest {
@@ -13,8 +14,9 @@ public class ConfigurationTest {
   public void defaultValues() {
     final Configuration configuration = Configuration.builder().build();
     assertThat(configuration.getEndpoint(), is("https://localhost:9002/hac"));
-    assertThat(configuration.getCredentials().getUsername(), is("admin"));
-    assertThat(configuration.getCredentials().getPassword(), is("nimda"));
+    assertThat(configuration.getUsername(), is("admin"));
+    assertThat(configuration.getPassword(), is("nimda"));
+    assertThat(configuration.getHtaccess(), is(nullValue()));
   }
 
   @Test
@@ -22,7 +24,9 @@ public class ConfigurationTest {
     final InputStream inputStream = getClass().getResourceAsStream("configuration.json");
     final Configuration configuration = Configuration.builder().from(inputStream).build();
     assertThat(configuration.getEndpoint(), is("endpoint"));
-    assertThat(configuration.getCredentials().getUsername(), is("username"));
-    assertThat(configuration.getCredentials().getPassword(), is("password"));
+    assertThat(configuration.getUsername(), is("username"));
+    assertThat(configuration.getPassword(), is("password"));
+    assertThat(configuration.getHtaccess().getUsername(), is("htusername"));
+    assertThat(configuration.getHtaccess().getPassword(), is("htpassword"));
   }
 }
