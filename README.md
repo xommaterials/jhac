@@ -109,6 +109,7 @@ Will export some data. Can be accessed via `impexResult.getExportResources()`.
 ## Command line interface
 
 Build on top of java client there is a command line interface providing a productive tool for daily tasks.
+Java 11 and higher is required for execution.
 
 ```
 Usage: jhac-cli [-C=<configurationFile> | [-e=<endpoint> -u=<username>
