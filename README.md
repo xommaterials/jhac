@@ -153,6 +153,10 @@ For simplicity the actual called endpoint (scripting, flexible search or impex) 
 
 There is no option to write the output to a file, but you can easily pipe it into a file with `>` and `&>`.
 
+### Downloads
+
+You can also find ready to use downloads at [releases](https://github.com/klaushauschild1984/jhac/releases).
+
 ## Interactive user interface
 
 _TODO_
