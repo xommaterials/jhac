@@ -134,6 +134,20 @@ You can either pass configuration as separate parameters or prepare a configurat
 and your credentials. Commit mode is defaulted to `false` but can be activated with `--commit`. If you need detailed
 information activate debugging with `--debug`.
 
+Use the following configuration file format for option `-C`. Configuration `htaccess` credentials is optional, omit them if not necessary.
+```
+{
+    "endpoint": "endpoint",
+    "username": "username",
+    "password": "password",
+    "htaccess": {
+        "username": "htusername",
+        "password": "htpassword"
+    }
+}
+
+```
+
 For simplicity the actual called endpoint (scripting, flexible search or impex) is derived from extension of given processing file.
 
 There is no option to write the output to a file, but you can easily pipe it into a file with `>` and `&>`.
