@@ -2,8 +2,9 @@ package com.sap.hybris.hac.cli;
 
 import com.sap.hybris.hac.Configuration;
 import com.sap.hybris.hac.Configuration.ConfigurationBuilder;
+import com.sap.hybris.hac.HybrisAdministrationConsole;
+import com.sap.hybris.hac.Result;
 import com.sap.hybris.hac.scripting.Script;
-import com.sap.hybris.hac.scripting.ScriptResult;
 import com.sap.hybris.hac.scripting.ScriptType;
 import org.apache.commons.io.FilenameUtils;
 import picocli.CommandLine;
@@ -19,6 +20,8 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.concurrent.Callable;
+import java.util.function.BiFunction;
+import java.util.function.Consumer;
 
 import static com.sap.hybris.hac.HybrisAdministrationConsole.hac;
 
@@ -99,25 +102,23 @@ public class HacCli implements Callable<Integer> {
   }
 
   private void groovy(final Configuration configuration) throws IOException {
-    try (final InputStream inputStream = new BufferedInputStream(new FileInputStream(file))) {
-      final ScriptResult scriptResult =
-          hac(configuration) //
-              .scripting() //
-              .execute( //
-                  Script.builder() //
-                      .scriptType(ScriptType.groovy) //
-                      .commit(commit)
-                      .script(inputStream)
-                      .build());
-      if (scriptResult.hasError()) {
-        System.err.println(scriptResult.getStacktraceText());
-      } else {
-        if (debug) {
-          System.err.println(scriptResult.getOutputText());
-        }
-        System.out.println(scriptResult.getExecutionResult());
-      }
-    }
+    process(
+        configuration,
+        (hac, inputStream) ->
+            hac.scripting() //
+                .execute( //
+                    Script.builder() //
+                        .scriptType(ScriptType.groovy) //
+                        .commit(commit) //
+                        .script(inputStream) //
+                        .build()),
+        result -> {
+          if (debug) {
+            System.err.println(result.getOutputText());
+          }
+          System.out.println(result.getExecutionResult());
+        },
+        result -> System.err.println(result.getStacktraceText()));
   }
 
   private void flexibleSearch(final Configuration configuration) {}
@@ -127,6 +128,23 @@ public class HacCli implements Callable<Integer> {
   private void importData(final Configuration configuration) {}
 
   private void exportData(final Configuration configuration) {}
+
+  private <T extends Result> void process(
+      final Configuration configuration,
+      final BiFunction<HybrisAdministrationConsole, InputStream, T> hacAction,
+      final Consumer<T> successHandler,
+      final Consumer<T> errorHandler)
+      throws IOException {
+    try (final InputStream inputStream = new BufferedInputStream(new FileInputStream(file))) {
+      final HybrisAdministrationConsole hac = hac(configuration);
+      final T result = hacAction.apply(hac, inputStream);
+      if (result.hasError()) {
+        errorHandler.accept(result);
+      } else {
+        successHandler.accept(result);
+      }
+    }
+  }
 
   private Configuration buildConfiguration() {
     final ConfigurationBuilder builder = Configuration.builder();

@@ -1,5 +1,6 @@
 package com.sap.hybris.hac.scripting;
 
+import com.sap.hybris.hac.Result;
 import lombok.Getter;
 import lombok.ToString;
 
@@ -15,7 +16,7 @@ import lombok.ToString;
  */
 @Getter
 @ToString
-public class ScriptResult {
+public class ScriptResult implements Result {
 
   private String executionResult;
   private String outputText;
@@ -28,6 +29,7 @@ public class ScriptResult {
    *     further details<br>
    *     <code>false</code> if script execution was successful
    */
+  @Override
   public boolean hasError() {
     return stacktraceText.length() > 0;
   }

@@ -4,6 +4,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
+
+import com.sap.hybris.hac.Result;
 import lombok.Getter;
 import lombok.ToString;
 
@@ -14,7 +16,7 @@ import lombok.ToString;
  */
 @Getter
 @ToString
-public class QueryResult {
+public class QueryResult implements Result {
 
   private String catalogVersionsAsString;
   private Throwable exception;
@@ -40,6 +42,7 @@ public class QueryResult {
     return resultList.size();
   }
 
+  @Override
   public boolean hasError() {
     return exception != null;
   }
