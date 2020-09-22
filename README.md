@@ -101,7 +101,7 @@ Will export some data. Can be accessed via `impexResult.getExportResources()`.
     <dependency>
         <groupId>com.github.klaushauschild1984</groupId>
         <artifactId>jhac</artifactId>
-        <version>master-SNAPSHOT</version>
+        <version>1.0-alpha.1</version>
     </dependency>
 </dependencies>
 ```
