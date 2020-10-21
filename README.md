@@ -99,9 +99,9 @@ Will export some data. Can be accessed via `impexResult.getExportResources()`.
 ...
 <dependencies>
     <dependency>
-        <groupId>com.github.klaushauschild1984</groupId>
-        <artifactId>jhac</artifactId>
-        <version>1.0-alpha.1</version>
+        <groupId>com.github.klaushauschild1984.jhac</groupId>
+        <artifactId>jhac-core</artifactId>
+        <version>1.0-alpha.3</version>
     </dependency>
 </dependencies>
 ```

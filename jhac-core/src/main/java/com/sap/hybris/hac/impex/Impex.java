@@ -28,21 +28,21 @@ public class Impex {
 
   static class ImpexBuilder {
 
-    ImpexBuilder scriptContent(final String scriptContent) {
+    public ImpexBuilder scriptContent(final String scriptContent) {
       this.scriptContent = scriptContent;
       return this;
     }
 
-    ImpexBuilder scriptContent(final InputStream scriptContent) {
+    public ImpexBuilder scriptContent(final InputStream scriptContent) {
       this.scriptContent = readLines(scriptContent, "script content");
       return this;
     }
 
-    Impex buildImport() {
+    public Impex buildImport() {
       return build(Validation.IMPORT_STRICT);
     }
 
-    Impex build(final Validation validationDefault) {
+    public Impex build(final Validation validationDefault) {
       // validation
       if (scriptContent == null) {
         throw new IllegalArgumentException("script content must not be null");
@@ -83,7 +83,7 @@ public class Impex {
           _sldEnabled);
     }
 
-    Impex buildExport() {
+    public Impex buildExport() {
       return build(Validation.EXPORT_ONLY);
     }
   }
