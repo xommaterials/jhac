@@ -26,7 +26,7 @@ public class Impex {
   private Boolean _distributedMode;
   private Boolean _sldEnabled;
 
-  static class ImpexBuilder {
+  public static class ImpexBuilder {
 
     public ImpexBuilder scriptContent(final String scriptContent) {
       this.scriptContent = scriptContent;
