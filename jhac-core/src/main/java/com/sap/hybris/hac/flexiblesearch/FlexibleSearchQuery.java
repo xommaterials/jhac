@@ -27,27 +27,27 @@ public class FlexibleSearchQuery {
 
   static class FlexibleSearchQueryBuilder {
 
-    FlexibleSearchQueryBuilder flexibleSearchQuery(final String flexibleSearchQuery) {
+    public FlexibleSearchQueryBuilder flexibleSearchQuery(final String flexibleSearchQuery) {
       this.flexibleSearchQuery = flexibleSearchQuery;
       return this;
     }
 
-    FlexibleSearchQueryBuilder flexibleSearchQuery(final InputStream flexibleSearchQuery) {
+    public FlexibleSearchQueryBuilder flexibleSearchQuery(final InputStream flexibleSearchQuery) {
       this.flexibleSearchQuery = readLines(flexibleSearchQuery, "flexible search query");
       return this;
     }
 
-    FlexibleSearchQueryBuilder sqlQuery(final String sqlQuery) {
+    public FlexibleSearchQueryBuilder sqlQuery(final String sqlQuery) {
       this.sqlQuery = sqlQuery;
       return this;
     }
 
-    FlexibleSearchQueryBuilder sqlQuery(final InputStream sqlQuery) {
+    public FlexibleSearchQueryBuilder sqlQuery(final InputStream sqlQuery) {
       this.sqlQuery = readLines(sqlQuery, "sql query");
       return this;
     }
 
-    FlexibleSearchQuery build() {
+    public FlexibleSearchQuery build() {
       // validation
       if (flexibleSearchQuery == null && sqlQuery == null) {
         throw new IllegalArgumentException(

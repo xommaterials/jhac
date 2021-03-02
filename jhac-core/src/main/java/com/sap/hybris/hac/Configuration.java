@@ -27,7 +27,7 @@ public class Configuration extends Credentials {
   private Configuration() {}
 
   @Builder
-  private Configuration(final String endpoint, final String username, final String password, final Credentials htaccess) {
+  public Configuration(final String endpoint, final String username, final String password, final Credentials htaccess) {
     super(username, password);
     this.endpoint = endpoint;
     this.htaccess = htaccess;
