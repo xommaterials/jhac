@@ -8,7 +8,7 @@ public class CommunicationException extends RuntimeException {
   @Getter private final Object request;
 
   public <REQUEST> CommunicationException(
-      final String message, final REQUEST request, final RestClientException cause) {
+      final String message, final REQUEST request, final Exception cause) {
     super(message, cause);
     this.request = request;
   }

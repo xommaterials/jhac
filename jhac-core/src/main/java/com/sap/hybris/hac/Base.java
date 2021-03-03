@@ -1,6 +1,10 @@
 package com.sap.hybris.hac;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.github.rholder.retry.RetryException;
+import com.github.rholder.retry.Retryer;
+import com.github.rholder.retry.RetryerBuilder;
+import com.github.rholder.retry.StopStrategies;
 import com.sap.hybris.hac.exception.CommunicationException;
 import com.sap.hybris.hac.util.StatefulRestTemplate;
 import org.jsoup.Jsoup;
@@ -20,7 +24,9 @@ import org.springframework.web.client.RestTemplate;
 
 import java.nio.charset.StandardCharsets;
 import java.util.Map;
+import java.util.concurrent.ExecutionException;
 
+import static com.github.rholder.retry.StopStrategies.stopAfterAttempt;
 import static java.util.Collections.singletonList;
 
 /**
@@ -45,16 +51,38 @@ public abstract class Base<REQUEST, RESPONSE> {
     return configuration;
   }
 
-  protected RESPONSE execute(final REQUEST request, final String path) throws CommunicationException {
+  protected RESPONSE execute(final REQUEST request, final String path)
+      throws CommunicationException {
     return execute(request, path, "/execute");
   }
 
-  protected RESPONSE execute(final REQUEST request, final String path, final String action) throws CommunicationException {
+  protected RESPONSE execute(final REQUEST request, final String path, final String action)
+      throws CommunicationException {
     logger.debug("Execute {}{}: {}", configuration.getEndpoint(), path, request);
 
     final HttpHeaders requestHeaders = requestHeaders();
     final RestTemplate restTemplate = prepareRestTemplate(requestHeaders, path);
 
+    final Retryer<RESPONSE> retryer =
+        RetryerBuilder.<RESPONSE>newBuilder()
+            .retryIfExceptionOfType(CommunicationException.class)
+            .withStopStrategy(stopAfterAttempt(3))
+            .build();
+    try {
+      return retryer.call(() -> execute(request, path, action, requestHeaders, restTemplate));
+    } catch (final ExecutionException exception) {
+      throw new RuntimeException(exception);
+    } catch (final RetryException exception) {
+      throw new CommunicationException("Communication error. Retires failed.", request, exception);
+    }
+  }
+
+  private RESPONSE execute(
+      final REQUEST request,
+      final String path,
+      final String action,
+      final HttpHeaders requestHeaders,
+      final RestTemplate restTemplate) {
     try {
       final HttpEntity<MultiValueMap<String, Object>> requestEntity =
           requestEntity(request, requestHeaders);
@@ -69,7 +97,8 @@ public abstract class Base<REQUEST, RESPONSE> {
       logger.debug("Result: {}", result);
       return result;
     } catch (final RestClientException exception) {
-      throw new CommunicationException(String.format("Error while communicating with %s", path), request, exception);
+      throw new CommunicationException(
+          String.format("Error while communicating with %s", path), request, exception);
     }
   }
 
