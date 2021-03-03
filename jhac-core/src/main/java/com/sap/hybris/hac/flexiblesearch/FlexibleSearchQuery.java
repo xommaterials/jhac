@@ -25,7 +25,7 @@ public class FlexibleSearchQuery {
   private Locale locale;
   private boolean commit;
 
-  static class FlexibleSearchQueryBuilder {
+  public static class FlexibleSearchQueryBuilder {
 
     public FlexibleSearchQueryBuilder flexibleSearchQuery(final String flexibleSearchQuery) {
       this.flexibleSearchQuery = flexibleSearchQuery;
