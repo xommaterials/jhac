@@ -2,6 +2,7 @@ package com.sap.hybris.hac.scripting;
 
 import com.sap.hybris.hac.Base;
 import com.sap.hybris.hac.Configuration;
+import com.sap.hybris.hac.exception.CommunicationException;
 
 /**
  * Scripting endpoint.
@@ -22,7 +23,7 @@ public class Scripting extends Base<Script, ScriptResult> {
    * @param script script to execute
    * @return execution result
    */
-  public ScriptResult execute(final Script script) {
+  public ScriptResult execute(final Script script) throws CommunicationException {
     return execute(script, PATH);
   }
 }

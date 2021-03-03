@@ -1,6 +1,7 @@
 package com.sap.hybris.hac;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.sap.hybris.hac.exception.CommunicationException;
 import com.sap.hybris.hac.util.StatefulRestTemplate;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -14,6 +15,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
+import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
 import java.nio.charset.StandardCharsets;
@@ -28,7 +30,7 @@ import static java.util.Collections.singletonList;
  */
 public abstract class Base<REQUEST, RESPONSE> {
 
-  private final ObjectMapper MAPPER = new ObjectMapper();
+  private static final ObjectMapper MAPPER = new ObjectMapper();
 
   private final Logger logger = LoggerFactory.getLogger(getClass());
   private final Configuration configuration;
@@ -43,30 +45,32 @@ public abstract class Base<REQUEST, RESPONSE> {
     return configuration;
   }
 
-  protected RESPONSE execute(final REQUEST request, final String path) {
+  protected RESPONSE execute(final REQUEST request, final String path) throws CommunicationException {
     return execute(request, path, "/execute");
   }
 
-  protected RESPONSE execute(final REQUEST request, final String path, final String action) {
-    logger.debug("Execute {}: {}", configuration.getEndpoint() + path, request);
+  protected RESPONSE execute(final REQUEST request, final String path, final String action) throws CommunicationException {
+    logger.debug("Execute {}{}: {}", configuration.getEndpoint(), path, request);
 
     final HttpHeaders requestHeaders = requestHeaders();
     final RestTemplate restTemplate = prepareRestTemplate(requestHeaders, path);
 
-    final HttpEntity<MultiValueMap<String, Object>> requestEntity =
-        requestEntity(request, requestHeaders);
-    final ResponseEntity<RESPONSE> response =
-        (ResponseEntity<RESPONSE>)
-            restTemplate.exchange(
-                configuration.getEndpoint() + "/console" + path + action,
-                HttpMethod.POST,
-                requestEntity,
-                responseType);
-    // TODO explicit error handling
-
-    final RESPONSE result = response.getBody();
-    logger.debug("Result: {}", result);
-    return result;
+    try {
+      final HttpEntity<MultiValueMap<String, Object>> requestEntity =
+          requestEntity(request, requestHeaders);
+      final ResponseEntity<RESPONSE> response =
+          (ResponseEntity<RESPONSE>)
+              restTemplate.exchange(
+                  String.format("%s/console%s%s", configuration.getEndpoint(), path, action),
+                  HttpMethod.POST,
+                  requestEntity,
+                  responseType);
+      final RESPONSE result = response.getBody();
+      logger.debug("Result: {}", result);
+      return result;
+    } catch (final RestClientException exception) {
+      throw new CommunicationException(String.format("Error while communicating with %s", path), request, exception);
+    }
   }
 
   protected RestTemplate prepareRestTemplate(final HttpHeaders requestHeaders, final String path) {

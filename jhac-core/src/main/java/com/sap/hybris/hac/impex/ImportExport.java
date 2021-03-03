@@ -6,6 +6,8 @@ import com.sap.hybris.hac.Base;
 import com.sap.hybris.hac.Configuration;
 import java.util.List;
 import java.util.stream.Collectors;
+
+import com.sap.hybris.hac.exception.CommunicationException;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -30,7 +32,7 @@ public class ImportExport extends Base<Impex, ImpexResult> {
     super(configuration, String.class);
   }
 
-  public ImpexResult importData(final Impex impex) {
+  public ImpexResult importData(final Impex impex) throws CommunicationException {
     final Object result = execute(impex, PATH + IMPORT, "");
     final String asString = result.toString();
     final Document resultHtml = Jsoup.parse(asString);
@@ -51,7 +53,7 @@ public class ImportExport extends Base<Impex, ImpexResult> {
     return resultHtml.select(".impexResult pre").text();
   }
 
-  public ImpexResult exportData(final Impex impex) {
+  public ImpexResult exportData(final Impex impex) throws CommunicationException {
     final Object result = execute(impex, PATH + EXPORT, "");
     final String asString = result.toString();
     final Document resultHtml = Jsoup.parse(asString);

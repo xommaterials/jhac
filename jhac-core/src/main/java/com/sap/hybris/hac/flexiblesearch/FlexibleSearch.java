@@ -2,6 +2,7 @@ package com.sap.hybris.hac.flexiblesearch;
 
 import com.sap.hybris.hac.Base;
 import com.sap.hybris.hac.Configuration;
+import com.sap.hybris.hac.exception.CommunicationException;
 
 /**
  * Flexible search endpoint.
@@ -22,7 +23,7 @@ public class FlexibleSearch extends Base<FlexibleSearchQuery, QueryResult> {
    * @param query query
    * @return result
    */
-  public QueryResult query(final FlexibleSearchQuery query) {
+  public QueryResult query(final FlexibleSearchQuery query) throws CommunicationException {
     return execute(query, PATH);
   }
 }
