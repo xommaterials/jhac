@@ -1,6 +1,8 @@
 package com.sap.hybris.hac;
 
+import com.sap.hybris.hac.exception.ConnectionException;
 import com.sap.hybris.hac.flexiblesearch.FlexibleSearch;
+import com.sap.hybris.hac.flexiblesearch.FlexibleSearchQuery;
 import com.sap.hybris.hac.impex.ImportExport;
 import com.sap.hybris.hac.scripting.Scripting;
 
@@ -15,6 +17,34 @@ public class HybrisAdministrationConsole {
 
   private HybrisAdministrationConsole(final Configuration configuration) {
     this.configuration = configuration;
+    connectionTest();
+  }
+
+  /**
+   * Performs a connection test before any 'real' request is performed.
+   *
+   * <p>This is achieved by executing a flexible search query that will never fail but returns also
+   * nothing.
+   *
+   * <p>From that point on, any exception occurring while a request will be caused from payload
+   * problems.
+   */
+  private void connectionTest() {
+    try {
+      flexibleSearch()
+          .query(
+              FlexibleSearchQuery.builder()
+                  .flexibleSearchQuery( //
+                      "SELECT * " //
+                          + "FROM { Product } " //
+                          + "WHERE 0 = 1") //
+                  .build());
+    } catch (final Exception exception) {
+      throw new ConnectionException(
+          String.format(
+              "Unable to establish connection to hAC at %s.", configuration.getEndpoint()),
+          exception);
+    }
   }
 
   /**

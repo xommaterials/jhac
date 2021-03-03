@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sap.hybris.hac.util.StatefulRestTemplate;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
+import org.jsoup.select.Elements;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpEntity;
@@ -61,6 +62,7 @@ public abstract class Base<REQUEST, RESPONSE> {
                 HttpMethod.POST,
                 requestEntity,
                 responseType);
+    // TODO explicit error handling
 
     final RESPONSE result = response.getBody();
     logger.debug("Result: {}", result);
@@ -107,7 +109,14 @@ public abstract class Base<REQUEST, RESPONSE> {
 
   private String extractCsrfToken(final ResponseEntity<String> pageResponse) {
     final Document loginPage = Jsoup.parse(pageResponse.getBody());
-    return loginPage.select("input[name=_csrf]").first().val();
+    if (loginPage == null) {
+      return null;
+    }
+    final Elements csrfInputs = loginPage.select("input[name=_csrf]");
+    if (csrfInputs.isEmpty()) {
+      return null;
+    }
+    return csrfInputs.first().val();
   }
 
   private HttpHeaders requestHeaders() {
