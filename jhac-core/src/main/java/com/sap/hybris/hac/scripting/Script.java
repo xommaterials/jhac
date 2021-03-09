@@ -1,6 +1,6 @@
 package com.sap.hybris.hac.scripting;
 
-import static com.sap.hybris.hac.util.InputStreamUtils.readLines;
+import static com.sap.hybris.hac.util.Utils.readLines;
 
 import java.io.InputStream;
 import lombok.Builder;

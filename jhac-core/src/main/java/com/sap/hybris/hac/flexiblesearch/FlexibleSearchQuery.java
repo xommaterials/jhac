@@ -1,12 +1,13 @@
 package com.sap.hybris.hac.flexiblesearch;
 
-import static com.sap.hybris.hac.util.InputStreamUtils.readLines;
-
-import java.io.InputStream;
-import java.util.Locale;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.ToString;
+
+import java.io.InputStream;
+import java.util.Locale;
+
+import static com.sap.hybris.hac.util.Utils.readLines;
 
 /**
  * Flexible search / SQL query
