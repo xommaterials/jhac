@@ -17,11 +17,11 @@ import lombok.ToString;
 @ToString
 public class ImpexResult implements Result {
 
-  private String error;
+  private List<String> errors;
   private List<byte[]> exportResources;
 
   @Override
   public boolean hasError() {
-    return !error.isEmpty();
+    return !errors.isEmpty();
   }
 }

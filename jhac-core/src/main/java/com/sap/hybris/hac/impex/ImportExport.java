@@ -1,12 +1,7 @@
 package com.sap.hybris.hac.impex;
 
-import static java.util.Collections.emptyList;
-
 import com.sap.hybris.hac.Base;
 import com.sap.hybris.hac.Configuration;
-import java.util.List;
-import java.util.stream.Collectors;
-
 import com.sap.hybris.hac.exception.CommunicationException;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -14,8 +9,15 @@ import org.jsoup.nodes.Element;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
-import org.springframework.web.client.RestClientException;
+import org.springframework.util.StringUtils;
 import org.springframework.web.client.RestTemplate;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
+
+import static java.util.Collections.emptyList;
+import static java.util.Collections.singletonList;
 
 /**
  * Import / export endpoint.
@@ -32,25 +34,32 @@ public class ImportExport extends Base<Impex, ImpexResult> {
     super(configuration, String.class);
   }
 
-  public ImpexResult importData(final Impex impex) throws CommunicationException {
-    final Object result = execute(impex, PATH + IMPORT, "");
-    final String asString = result.toString();
-    final Document resultHtml = Jsoup.parse(asString);
+  public ImpexResult importData(final Impex... impexes) throws CommunicationException {
+    final List<String> errors = new ArrayList<>();
+    for (final Impex impex : impexes) {
+      final Object result = execute(impex, PATH + IMPORT, "");
+      final String asString = result.toString();
+      final Document resultHtml = Jsoup.parse(asString);
 
-    final List<String> communicationErrors =
-        resultHtml.select(".error").stream() //
-            .map(Element::text) //
-            .collect(Collectors.toList());
-    if (!communicationErrors.isEmpty()) {
-      throw new RestClientException(String.join("\n", communicationErrors));
+      final List<String> communicationErrors =
+          resultHtml.select(".error").stream() //
+              .map(Element::text) //
+              .collect(Collectors.toList());
+      if (!communicationErrors.isEmpty()) {
+        throw new CommunicationException(String.join("\n", communicationErrors), impex, null);
+      }
+
+      final String error = getError(resultHtml);
+      if (!StringUtils.isEmpty(error)) {
+        errors.add(error);
+      }
     }
 
-    final String error = getError(resultHtml);
-    return new ImpexResult(error, emptyList());
+    return new ImpexResult(errors, emptyList());
   }
 
   private String getError(final Document resultHtml) {
-    return resultHtml.select(".impexResult pre").text();
+    return resultHtml.select(".impexResult pre").text().trim();
   }
 
   public ImpexResult exportData(final Impex impex) throws CommunicationException {
@@ -59,7 +68,7 @@ public class ImportExport extends Base<Impex, ImpexResult> {
     final Document resultHtml = Jsoup.parse(asString);
 
     final String error = getError(resultHtml);
-    final ImpexResult errorResult = new ImpexResult(error, null);
+    final ImpexResult errorResult = new ImpexResult(singletonList(error), null);
     if (errorResult.hasError()) {
       return errorResult;
     }
@@ -83,6 +92,6 @@ public class ImportExport extends Base<Impex, ImpexResult> {
                         .getBody())
             .collect(Collectors.toList());
 
-    return new ImpexResult("", exportResources);
+    return new ImpexResult(emptyList(), exportResources);
   }
 }
