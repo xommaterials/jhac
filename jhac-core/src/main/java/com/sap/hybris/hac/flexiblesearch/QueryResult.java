@@ -1,13 +1,16 @@
 package com.sap.hybris.hac.flexiblesearch;
 
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
+import java.util.ListIterator;
 import java.util.Map;
 import java.util.stream.Collectors;
 
 import com.sap.hybris.hac.Result;
 import lombok.Getter;
 import lombok.ToString;
+import org.jsoup.parser.Parser;
 
 /**
  * Flexible search / SQL query result.
@@ -26,7 +29,6 @@ public class QueryResult implements Result {
   private String parametersAsString;
   private String query;
   private boolean rawExecution;
-  //  private int resultCount;
   private List<List<String>> resultList;
 
   /**
@@ -63,6 +65,23 @@ public class QueryResult implements Result {
               return entry;
             })
         .collect(Collectors.toList());
+  }
+
+  /**
+   * Initially each value in {@link #getResultList()} will be HTML escaped because HAC return it
+   * like this. After receiving the result use this method once to revert all HTML escaping. This
+   * may 'destroy' intentional HTML escaping too.
+   */
+  public void revertHtmlMasking() {
+    resultList.forEach(
+        line -> {
+          final ListIterator<String> iterator = line.listIterator();
+          while (iterator.hasNext()) {
+            final String value = iterator.next();
+            final String unescapedValue = Parser.unescapeEntities(value, true);
+            iterator.set(unescapedValue);
+          }
+        });
   }
 
   /**

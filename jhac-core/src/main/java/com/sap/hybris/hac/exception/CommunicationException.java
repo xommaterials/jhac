@@ -1,7 +1,6 @@
 package com.sap.hybris.hac.exception;
 
 import lombok.Getter;
-import org.springframework.web.client.RestClientException;
 
 public class CommunicationException extends RuntimeException {
 
