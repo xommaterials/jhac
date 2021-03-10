@@ -4,7 +4,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.rholder.retry.RetryException;
 import com.github.rholder.retry.Retryer;
 import com.github.rholder.retry.RetryerBuilder;
-import com.github.rholder.retry.StopStrategies;
 import com.sap.hybris.hac.exception.CommunicationException;
 import com.sap.hybris.hac.util.StatefulRestTemplate;
 import org.jsoup.Jsoup;

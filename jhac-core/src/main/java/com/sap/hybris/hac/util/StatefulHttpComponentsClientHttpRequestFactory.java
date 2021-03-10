@@ -1,10 +1,11 @@
 package com.sap.hybris.hac.util;
 
-import java.net.URI;
 import org.apache.http.client.HttpClient;
 import org.apache.http.protocol.HttpContext;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
+
+import java.net.URI;
 
 /**
  * Supporting {@link HttpComponentsClientHttpRequestFactory} extension for {@link

@@ -1,10 +1,10 @@
 package com.sap.hybris.hac.impex;
 
+import org.junit.Test;
+
 import static com.sap.hybris.hac.HybrisAdministrationConsole.hac;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
-
-import org.junit.Test;
 
 public class ImportExportIT {
 

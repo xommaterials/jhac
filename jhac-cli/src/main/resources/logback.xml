@@ -1,9 +1,9 @@
 <configuration>
 
-    <appender name="null" class="ch.qos.logback.core.helpers.NOPAppender"/>
+    <appender name="null" class="ch.qos.logback.core.helpers.NOPAppender" />
 
     <root level="error">
-        <appender-ref ref="null"/>
+        <appender-ref ref="null" />
     </root>
 
 </configuration>

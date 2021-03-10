@@ -1,6 +1,7 @@
 # Java client for SAP Hybris administration console [![Build Status](https://travis-ci.org/klaushauschild1984/jhac.svg?branch=master)](https://travis-ci.org/klaushauschild1984/jhac)
 
 SAP Hybris offers with its administration console a powerful tool to
+
 * execute code
 * query data
 * import data
@@ -28,7 +29,7 @@ hac()
 
 This will execute the default Groovy script at a local running Hybris instance.
 
-If you manage to produce an execution result parsable into Java base types `ScriptingResult` has various `asXXX()` methods to get execution result as requested type. 
+If you manage to produce an execution result parsable into Java base types `ScriptingResult` has various `asXXX()` methods to get execution result as requested type.
 
 ## Flexible search
 
@@ -108,8 +109,7 @@ Will export some data. Can be accessed via `impexResult.getExportResources()`.
 
 ## Command line interface
 
-Build on top of java client there is a command line interface providing a productive tool for daily tasks.
-Java 11 and higher is required for execution.
+Build on top of java client there is a command line interface providing a productive tool for daily tasks. Java 11 and higher is required for execution.
 
 ```
 Usage: jhac-cli [-C=<configurationFile> | [-e=<endpoint> -u=<username>
@@ -131,11 +131,10 @@ Usage: jhac-cli [-C=<configurationFile> | [-e=<endpoint> -u=<username>
   -v, --version              display version info
 ```
 
-You can either pass configuration as separate parameters or prepare a configuration JSON to specify targeted endpoint
-and your credentials. Commit mode is defaulted to `false` but can be activated with `--commit`. If you need detailed
-information activate debugging with `--debug`.
+You can either pass configuration as separate parameters or prepare a configuration JSON to specify targeted endpoint and your credentials. Commit mode is defaulted to `false` but can be activated with `--commit`. If you need detailed information activate debugging with `--debug`.
 
 Use the following configuration file format for option `-C`. Configuration `htaccess` credentials is optional, omit them if not necessary.
+
 ```
 {
     "endpoint": "endpoint",

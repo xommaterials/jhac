@@ -1,6 +1,5 @@
 package com.sap.hybris.hac.util;
 
-import javax.net.ssl.SSLContext;
 import org.apache.http.client.CookieStore;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.protocol.ClientContext;
@@ -11,6 +10,8 @@ import org.apache.http.protocol.BasicHttpContext;
 import org.apache.http.protocol.HttpContext;
 import org.apache.http.ssl.SSLContextBuilder;
 import org.springframework.web.client.RestTemplate;
+
+import javax.net.ssl.SSLContext;
 
 /**
  * Stateful extension of {@link RestTemplate}.
