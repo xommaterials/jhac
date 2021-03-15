@@ -2,6 +2,7 @@ package com.sap.hybris.hac;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.Builder;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 
 import java.io.IOException;
@@ -19,6 +20,7 @@ import java.io.InputStream;
  * @author Klaus Hauschild
  */
 @Getter
+@EqualsAndHashCode(callSuper=true)
 public class Configuration extends Credentials {
 
   private String endpoint;
@@ -70,4 +72,5 @@ public class Configuration extends Credentials {
       return new Configuration(endpoint, username, password, htaccess);
     }
   }
+  
 }
