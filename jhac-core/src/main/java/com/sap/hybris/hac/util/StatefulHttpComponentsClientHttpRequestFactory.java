@@ -25,7 +25,7 @@ public class StatefulHttpComponentsClientHttpRequestFactory
   }
 
   @Override
-  protected HttpContext createHttpContext(HttpMethod httpMethod, URI uri) {
+  protected HttpContext createHttpContext(final HttpMethod httpMethod, final URI uri) {
     return this.httpContext;
   }
 }

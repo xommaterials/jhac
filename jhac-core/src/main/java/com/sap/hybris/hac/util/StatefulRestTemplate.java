@@ -20,31 +20,30 @@ import javax.net.ssl.SSLContext;
  */
 public class StatefulRestTemplate extends RestTemplate {
 
-  private final HttpClient httpClient;
   private final CookieStore cookieStore;
-  private final HttpContext httpContext;
-  private final StatefulHttpComponentsClientHttpRequestFactory
-      statefulHttpComponentsClientHttpRequestFactory;
 
   public StatefulRestTemplate() {
     super();
     try {
-      org.apache.http.ssl.SSLContextBuilder sslContextBuilder = SSLContextBuilder.create();
+      final SSLContextBuilder sslContextBuilder = SSLContextBuilder.create();
       sslContextBuilder.loadTrustMaterial(new org.apache.http.conn.ssl.TrustSelfSignedStrategy());
-      SSLContext sslContext = sslContextBuilder.build();
-      org.apache.http.conn.ssl.SSLConnectionSocketFactory sslSocketFactory =
+      final SSLContext sslContext = sslContextBuilder.build();
+      final SSLConnectionSocketFactory sslSocketFactory =
           new SSLConnectionSocketFactory(
               sslContext, new org.apache.http.conn.ssl.DefaultHostnameVerifier());
-      httpClient = HttpClients.custom().setSSLSocketFactory(sslSocketFactory).build();
+      final HttpClient httpClient =
+          HttpClients.custom().setSSLSocketFactory(sslSocketFactory).build();
+
+      cookieStore = new BasicCookieStore();
+      final HttpContext httpContext = new BasicHttpContext();
+      httpContext.setAttribute(ClientContext.COOKIE_STORE, getCookieStore());
+      final StatefulHttpComponentsClientHttpRequestFactory
+          statefulHttpComponentsClientHttpRequestFactory =
+              new StatefulHttpComponentsClientHttpRequestFactory(httpClient, httpContext);
+      super.setRequestFactory(statefulHttpComponentsClientHttpRequestFactory);
     } catch (final Exception exception) {
       throw new RuntimeException(exception);
     }
-    cookieStore = new BasicCookieStore();
-    httpContext = new BasicHttpContext();
-    httpContext.setAttribute(ClientContext.COOKIE_STORE, getCookieStore());
-    statefulHttpComponentsClientHttpRequestFactory =
-        new StatefulHttpComponentsClientHttpRequestFactory(httpClient, httpContext);
-    super.setRequestFactory(statefulHttpComponentsClientHttpRequestFactory);
   }
 
   public CookieStore getCookieStore() {
