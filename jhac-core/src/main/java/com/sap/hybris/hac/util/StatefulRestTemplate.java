@@ -3,7 +3,9 @@ package com.sap.hybris.hac.util;
 import org.apache.http.client.CookieStore;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.protocol.ClientContext;
+import org.apache.http.conn.ssl.NoopHostnameVerifier;
 import org.apache.http.conn.ssl.SSLConnectionSocketFactory;
+import org.apache.http.conn.ssl.TrustSelfSignedStrategy;
 import org.apache.http.impl.client.BasicCookieStore;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.protocol.BasicHttpContext;
@@ -26,11 +28,10 @@ public class StatefulRestTemplate extends RestTemplate {
     super();
     try {
       final SSLContextBuilder sslContextBuilder = SSLContextBuilder.create();
-      sslContextBuilder.loadTrustMaterial(new org.apache.http.conn.ssl.TrustSelfSignedStrategy());
+      sslContextBuilder.loadTrustMaterial(new TrustSelfSignedStrategy());
       final SSLContext sslContext = sslContextBuilder.build();
       final SSLConnectionSocketFactory sslSocketFactory =
-          new SSLConnectionSocketFactory(
-              sslContext, new org.apache.http.conn.ssl.DefaultHostnameVerifier());
+          new SSLConnectionSocketFactory(sslContext, new NoopHostnameVerifier());
       final HttpClient httpClient =
           HttpClients.custom().setSSLSocketFactory(sslSocketFactory).build();
 
