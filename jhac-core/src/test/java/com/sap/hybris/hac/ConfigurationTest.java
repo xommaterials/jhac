@@ -29,4 +29,15 @@ public class ConfigurationTest {
     assertThat(configuration.getHtaccess().getUsername(), is("htusername"));
     assertThat(configuration.getHtaccess().getPassword(), is("htpassword"));
   }
+
+  @Test
+  public void equals() {
+    assertThat(Configuration.builder().build(), is(Configuration.builder().build()));
+  }
+
+  @Test
+  public void hazhCode() {
+    assertThat(
+        Configuration.builder().build().hashCode(), is(Configuration.builder().build().hashCode()));
+  }
 }
