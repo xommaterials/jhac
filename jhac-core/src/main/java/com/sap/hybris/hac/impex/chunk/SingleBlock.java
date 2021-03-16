@@ -27,7 +27,7 @@ import java.util.stream.Collectors;
 @AllArgsConstructor
 public class SingleBlock implements Strategy {
 
-  private int chunkSize;
+  private final int chunkSize;
 
   @Override
   public Impex[] apply(final Impex impex) {
