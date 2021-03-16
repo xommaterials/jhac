@@ -58,9 +58,11 @@ hac()
 
 If you query for just a `COUNT` `QueryResult` has `count()` that will return the queried count.
 
+The entire query result will be HTML encoded. If you are not interested in this, use `QueryResult.revertHtmlMasking()` to convert the results to normal encoding.
+
 ## Impex
 
-Import or export data via impex.
+### Import
 
 ```
 hac()
@@ -73,7 +75,23 @@ hac()
             .buildImport());
 ```
 
-Will import some data.
+### Import chunking
+
+If you import data is huge and very likely that a single web request can handle this due to long response times, you can use built-in chunking.
+
+```
+InputStream = ...
+hac()
+    .impex()
+    .importData(
+        Impex.builder()
+            .scriptContent(inputStream)
+            .buildImport().chunked());
+```
+
+`Impex.chunked()` will break up the actual Impex into an array of Impexes which will be imported one after another. All results will be collected and returned as a single result. You can also chunk by your own or provide a chunk `Strategy`.
+
+### Export
 
 ```
 hac()
@@ -84,7 +102,7 @@ hac()
             .buildExport());
 ```
 
-Will export some data. Can be accessed via `impexResult.getExportResources()`.
+Exported data can be accessed via `impexResult.getExportResources()`.
 
 ## Maven dependency
 

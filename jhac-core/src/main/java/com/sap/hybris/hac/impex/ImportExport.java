@@ -13,11 +13,11 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
 import static java.util.Collections.emptyList;
-import static java.util.Collections.singletonList;
 
 /**
  * Import / export endpoint.
@@ -49,17 +49,17 @@ public class ImportExport extends Base<Impex, ImpexResult> {
         throw new CommunicationException(String.join("\n", communicationErrors), impex, null);
       }
 
-      final String error = getError(resultHtml);
+      final List<String> error = getError(resultHtml);
       if (!StringUtils.isEmpty(error)) {
-        errors.add(error);
+        errors.addAll(error);
       }
     }
 
     return new ImpexResult(errors, emptyList());
   }
 
-  private String getError(final Document resultHtml) {
-    return resultHtml.select(".impexResult pre").text().trim();
+  private List<String> getError(final Document resultHtml) {
+    return Arrays.asList(resultHtml.select(".impexResult pre").text().trim().split("\n").clone());
   }
 
   public ImpexResult exportData(final Impex impex) throws CommunicationException {
@@ -67,8 +67,8 @@ public class ImportExport extends Base<Impex, ImpexResult> {
     final String asString = result.toString();
     final Document resultHtml = Jsoup.parse(asString);
 
-    final String error = getError(resultHtml);
-    final ImpexResult errorResult = new ImpexResult(singletonList(error), null);
+    final List<String> error = getError(resultHtml);
+    final ImpexResult errorResult = new ImpexResult(error, null);
     if (errorResult.hasError()) {
       return errorResult;
     }

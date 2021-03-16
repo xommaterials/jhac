@@ -24,4 +24,24 @@ public class ImpexResult implements Result {
   public boolean hasError() {
     return !errors.isEmpty();
   }
+
+  public List<ParseError> parseErrors() {
+    throw new UnsupportedOperationException("not implemented yet");
+  }
+
+  @AllArgsConstructor
+  @Getter
+  @ToString
+  static class ParseError {
+
+    private final Type type;
+
+    enum Type {
+      HEADER,
+
+      DATA,
+
+      UNKNOWN,
+    }
+  }
 }
