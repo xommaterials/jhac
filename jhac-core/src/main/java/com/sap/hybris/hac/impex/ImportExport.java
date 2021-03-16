@@ -59,7 +59,10 @@ public class ImportExport extends Base<Impex, ImpexResult> {
   }
 
   private List<String> getError(final Document resultHtml) {
-    return Arrays.asList(resultHtml.select(".impexResult pre").text().trim().split("\n").clone());
+    return Arrays.stream(resultHtml.select(".impexResult pre").text().split("\n")) //
+        .map(String::trim) //
+        .filter(StringUtils::hasLength) //
+        .collect(Collectors.toList());
   }
 
   public ImpexResult exportData(final Impex impex) throws CommunicationException {
