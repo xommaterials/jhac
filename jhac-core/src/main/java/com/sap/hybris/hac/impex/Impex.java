@@ -7,6 +7,8 @@ import lombok.Getter;
 import lombok.ToString;
 
 import java.io.InputStream;
+import java.util.Arrays;
+import java.util.List;
 
 import static com.sap.hybris.hac.util.Utils.readLines;
 
@@ -19,6 +21,9 @@ import static com.sap.hybris.hac.util.Utils.readLines;
 @Getter
 @ToString
 public class Impex {
+
+  public static final List<String> KEY_WORDS =
+      Arrays.asList("INSERT", "UPDATE", "INSERT_UPDATE", "REMOVE");
 
   private static final int DEFAULT_CHUNK_SIZE = 1000;
 
