@@ -1,10 +1,14 @@
 package com.sap.hybris.hac.flexiblesearch;
 
+import org.junit.Test;
+
+import java.util.List;
+import java.util.Map;
+
 import static com.sap.hybris.hac.HybrisAdministrationConsole.hac;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
-
-import org.junit.Test;
+import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
 
 public class FlexibleSearchIT {
 
@@ -20,6 +24,25 @@ public class FlexibleSearchIT {
                     .build());
     assertThat(result.hasError(), is(false));
     assertThat(result.getResultCount(), is(1));
+  }
+
+  @Test
+  public void asMap() {
+    final QueryResult result = //
+        hac() //
+            .flexibleSearch() //
+            .query( //
+                FlexibleSearchQuery.builder() //
+                    .flexibleSearchQuery("SELECT * FROM { Product }") //
+                    .maxCount(1) //
+                    .build());
+    assertThat(result.hasError(), is(false));
+
+    final List<Map<String, String>> resultMap = result.asMap();
+    assertThat(resultMap, hasSize(1));
+    // PK column is typically upper-case
+    assertThat(resultMap.get(0).containsKey("PK"), is(false));
+    assertThat(resultMap.get(0).containsKey("pk"), is(true));
   }
 
   @Test

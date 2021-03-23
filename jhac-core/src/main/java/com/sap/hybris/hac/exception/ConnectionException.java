@@ -1,10 +1,9 @@
 package com.sap.hybris.hac.exception;
 
-import org.springframework.web.client.RestClientException;
-
+/** @author Klaus Hauschild */
 public class ConnectionException extends RuntimeException {
 
-  public ConnectionException(final String message, final RestClientException cause) {
+  public ConnectionException(final String message, final Exception cause) {
     super(message, cause);
   }
 }

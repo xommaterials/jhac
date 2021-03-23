@@ -1,31 +1,11 @@
-.idea
-*.iml
+# Maven
 **/target
 
-.project
+# IntelliJ
+.idea
+*.iml
 
-.settings/org.eclipse.m2e.core.prefs
-
-jhac-cli/.classpath
-
-jhac-cli/.settings/org.eclipse.core.resources.prefs
-
-jhac-cli/.settings/org.eclipse.jdt.core.prefs
-
-jhac-cli/.settings/org.eclipse.m2e.core.prefs
-
-jhac-core/.classpath
-
-jhac-core/.settings/org.eclipse.core.resources.prefs
-
-jhac-core/.settings/org.eclipse.jdt.core.prefs
-
-jhac-core/.settings/org.eclipse.m2e.core.prefs
-
-jhac-ui/.classpath
-
-jhac-ui/.settings/org.eclipse.core.resources.prefs
-
-jhac-ui/.settings/org.eclipse.jdt.core.prefs
-
-jhac-ui/.settings/org.eclipse.m2e.core.prefs
+# Eclipse
+**/.classpath
+**/.project
+**/.settings

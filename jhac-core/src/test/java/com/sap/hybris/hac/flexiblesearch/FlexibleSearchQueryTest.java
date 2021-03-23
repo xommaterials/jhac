@@ -1,11 +1,12 @@
 package com.sap.hybris.hac.flexiblesearch;
 
+import org.junit.Test;
+
+import java.util.Locale;
+
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
-
-import java.util.Locale;
-import org.junit.Test;
 
 public class FlexibleSearchQueryTest {
 

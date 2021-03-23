@@ -4,7 +4,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.rholder.retry.RetryException;
 import com.github.rholder.retry.Retryer;
 import com.github.rholder.retry.RetryerBuilder;
-import com.github.rholder.retry.StopStrategies;
 import com.sap.hybris.hac.exception.CommunicationException;
 import com.sap.hybris.hac.util.StatefulRestTemplate;
 import org.jsoup.Jsoup;
@@ -15,6 +14,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.LinkedMultiValueMap;
@@ -84,8 +84,11 @@ public abstract class Base<REQUEST, RESPONSE> {
       final HttpHeaders requestHeaders,
       final RestTemplate restTemplate) {
     try {
+      // prepare entity
       final HttpEntity<MultiValueMap<String, Object>> requestEntity =
           requestEntity(request, requestHeaders);
+
+      // perform request
       final ResponseEntity<RESPONSE> response =
           (ResponseEntity<RESPONSE>)
               restTemplate.exchange(
@@ -93,6 +96,14 @@ public abstract class Base<REQUEST, RESPONSE> {
                   HttpMethod.POST,
                   requestEntity,
                   responseType);
+
+      // handle not successful responses (redirect for wrong credentials)
+      final HttpStatus statusCode = response.getStatusCode();
+      if (!statusCode.is2xxSuccessful()) {
+        throw new RestClientException(String.format("Not successful: %s", statusCode));
+      }
+
+      // extract response
       final RESPONSE result = response.getBody();
       logger.debug("Result: {}", result);
       return result;

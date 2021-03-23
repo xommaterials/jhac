@@ -1,10 +1,12 @@
 package com.sap.hybris.hac;
 
 import lombok.Builder;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 
 @Builder(builderMethodName = "_builder")
 @Getter
+@EqualsAndHashCode
 public class Credentials {
 
   protected String username;

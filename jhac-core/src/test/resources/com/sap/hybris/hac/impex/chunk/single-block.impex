@@ -1,0 +1,6 @@
+$macro = foobar
+
+INSERT_UPDATE Product; code[unique = true]
+                     ; a
+                     ; b
+                     ; c

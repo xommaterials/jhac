@@ -1,11 +1,16 @@
 package com.sap.hybris.hac.impex;
 
-import static com.sap.hybris.hac.util.InputStreamUtils.readLines;
-
-import java.io.InputStream;
+import com.sap.hybris.hac.impex.chunk.SingleBlock;
+import com.sap.hybris.hac.impex.chunk.Strategy;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.ToString;
+
+import java.io.InputStream;
+import java.util.Arrays;
+import java.util.List;
+
+import static com.sap.hybris.hac.util.Utils.readLines;
 
 /**
  * Impex.
@@ -17,6 +22,11 @@ import lombok.ToString;
 @ToString
 public class Impex {
 
+  public static final List<String> KEY_WORDS =
+      Arrays.asList("INSERT", "UPDATE", "INSERT_UPDATE", "REMOVE");
+
+  private static final int DEFAULT_CHUNK_SIZE = 1000;
+
   private String scriptContent;
   private Validation validationEnum;
   private Integer maxThreads;
@@ -25,6 +35,24 @@ public class Impex {
   private Boolean _enableCodeExecution;
   private Boolean _distributedMode;
   private Boolean _sldEnabled;
+
+  public Impex[] chunked() {
+    return chunked(DEFAULT_CHUNK_SIZE);
+  }
+
+  public Impex[] chunked(final int chunkSize) {
+    return chunked(new SingleBlock(chunkSize));
+  }
+
+  /**
+   * Will split the current Impex into multiple chunks using the given {@link
+   * com.sap.hybris.hac.impex.chunk.Strategy Strategy}.
+   *
+   * @return chunked Impexes
+   */
+  public Impex[] chunked(final Strategy strategy) {
+    return strategy.apply(this);
+  }
 
   public static class ImpexBuilder {
 

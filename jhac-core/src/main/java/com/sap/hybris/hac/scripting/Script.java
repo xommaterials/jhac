@@ -1,11 +1,12 @@
 package com.sap.hybris.hac.scripting;
 
-import static com.sap.hybris.hac.util.InputStreamUtils.readLines;
-
-import java.io.InputStream;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.ToString;
+
+import java.io.InputStream;
+
+import static com.sap.hybris.hac.util.Utils.readLines;
 
 /**
  * Script. By default script type is set to <code>groovy</code> and commit mode is deactivated.

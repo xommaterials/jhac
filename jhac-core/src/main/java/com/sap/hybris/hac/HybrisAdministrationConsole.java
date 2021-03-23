@@ -5,7 +5,6 @@ import com.sap.hybris.hac.flexiblesearch.FlexibleSearch;
 import com.sap.hybris.hac.flexiblesearch.FlexibleSearchQuery;
 import com.sap.hybris.hac.impex.ImportExport;
 import com.sap.hybris.hac.scripting.Scripting;
-import org.springframework.web.client.RestClientException;
 
 /**
  * Hybris administration console.
@@ -42,10 +41,11 @@ public class HybrisAdministrationConsole {
                           + "FROM { Product } " //
                           + "WHERE 0 = 1") //
                   .build());
-    } catch (final RestClientException exception) {
+    } catch (final Exception exception) {
       throw new ConnectionException(
           String.format(
-              "Unable to establish connection to hAC at %s.", configuration.getEndpoint()),
+              "Unable to establish connection to hAC at %s with user %s.",
+              configuration.getEndpoint(), configuration.getUsername()),
           exception);
     }
   }

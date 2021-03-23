@@ -1,16 +1,15 @@
 package com.sap.hybris.hac.flexiblesearch;
 
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.ListIterator;
-import java.util.Map;
-import java.util.stream.Collectors;
-
 import com.sap.hybris.hac.Result;
 import lombok.Getter;
 import lombok.ToString;
 import org.jsoup.parser.Parser;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.ListIterator;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * Flexible search / SQL query result.
@@ -49,18 +48,29 @@ public class QueryResult implements Result {
     return exception != null;
   }
 
+  /** Shorthand for <code>asMap(true)</code>. */
+  public List<Map<String, String>> asMap() {
+    return asMap(true);
+  }
+
   /**
    * Convenience method to receive every result entry as association list (header -&gt; value).
    *
+   * @param lowerCaseHeaders indicates whether all headers should be lower cased (<code>true</code>
+   *     ), or not (<code>false</code>)
    * @return result as association lists
    */
-  public List<Map<String, String>> asMap() {
+  public List<Map<String, String>> asMap(final boolean lowerCaseHeaders) {
     return resultList.stream()
         .map(
             line -> {
               final Map<String, String> entry = new HashMap<>();
               for (int i = 0; i < headers.size(); i++) {
-                entry.put(headers.get(i), line.get(i));
+                String header = headers.get(i);
+                if (lowerCaseHeaders) {
+                  header = header.toLowerCase();
+                }
+                entry.put(header, line.get(i));
               }
               return entry;
             })

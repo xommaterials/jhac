@@ -1,6 +1,7 @@
 # Java client for SAP Hybris administration console [![Build Status](https://travis-ci.org/klaushauschild1984/jhac.svg?branch=master)](https://travis-ci.org/klaushauschild1984/jhac)
 
 SAP Hybris offers with its administration console a powerful tool to
+
 * execute code
 * query data
 * import data
@@ -28,7 +29,7 @@ hac()
 
 This will execute the default Groovy script at a local running Hybris instance.
 
-If you manage to produce an execution result parsable into Java base types `ScriptingResult` has various `asXXX()` methods to get execution result as requested type. 
+If you manage to produce an execution result parsable into Java base types `ScriptingResult` has various `asXXX()` methods to get execution result as requested type.
 
 ## Flexible search
 
@@ -57,9 +58,11 @@ hac()
 
 If you query for just a `COUNT` `QueryResult` has `count()` that will return the queried count.
 
+The entire query result will be HTML encoded. If you are not interested in this, use `QueryResult.revertHtmlMasking()` to convert the results to normal encoding.
+
 ## Impex
 
-Import or export data via impex.
+### Import
 
 ```
 hac()
@@ -72,7 +75,23 @@ hac()
             .buildImport());
 ```
 
-Will import some data.
+### Import chunking
+
+If you import data is huge and very likely that a single web request can handle this due to long response times, you can use built-in chunking.
+
+```
+InputStream = ...
+hac()
+    .impex()
+    .importData(
+        Impex.builder()
+            .scriptContent(inputStream)
+            .buildImport().chunked());
+```
+
+`Impex.chunked()` will break up the actual Impex into an array of Impexes which will be imported one after another. All results will be collected and returned as a single result. You can also chunk by your own or provide a chunk `Strategy`.
+
+### Export
 
 ```
 hac()
@@ -83,7 +102,7 @@ hac()
             .buildExport());
 ```
 
-Will export some data. Can be accessed via `impexResult.getExportResources()`.
+Exported data can be accessed via `impexResult.getExportResources()`.
 
 ## Maven dependency
 
@@ -108,8 +127,7 @@ Will export some data. Can be accessed via `impexResult.getExportResources()`.
 
 ## Command line interface
 
-Build on top of java client there is a command line interface providing a productive tool for daily tasks.
-Java 11 and higher is required for execution.
+Build on top of java client there is a command line interface providing a productive tool for daily tasks. Java 11 and higher is required for execution.
 
 ```
 Usage: jhac-cli [-C=<configurationFile> | [-e=<endpoint> -u=<username>
@@ -131,11 +149,10 @@ Usage: jhac-cli [-C=<configurationFile> | [-e=<endpoint> -u=<username>
   -v, --version              display version info
 ```
 
-You can either pass configuration as separate parameters or prepare a configuration JSON to specify targeted endpoint
-and your credentials. Commit mode is defaulted to `false` but can be activated with `--commit`. If you need detailed
-information activate debugging with `--debug`.
+You can either pass configuration as separate parameters or prepare a configuration JSON to specify targeted endpoint and your credentials. Commit mode is defaulted to `false` but can be activated with `--commit`. If you need detailed information activate debugging with `--debug`.
 
 Use the following configuration file format for option `-C`. Configuration `htaccess` credentials is optional, omit them if not necessary.
+
 ```
 {
     "endpoint": "endpoint",

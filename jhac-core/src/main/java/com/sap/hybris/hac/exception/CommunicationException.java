@@ -2,6 +2,7 @@ package com.sap.hybris.hac.exception;
 
 import lombok.Getter;
 
+/** @author Klaus Hauschild */
 public class CommunicationException extends RuntimeException {
 
   @Getter private final Object request;
