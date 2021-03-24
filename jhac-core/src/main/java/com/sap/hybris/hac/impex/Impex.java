@@ -25,6 +25,11 @@ public class Impex {
   public static final List<String> KEY_WORDS =
       Arrays.asList("INSERT", "UPDATE", "INSERT_UPDATE", "REMOVE");
 
+  public static boolean startsWithKeyword(final String line) {
+    final String firstWord = line.split(" ", 2)[0];
+    return Impex.KEY_WORDS.contains(firstWord);
+  }
+
   private static final int DEFAULT_CHUNK_SIZE = 1000;
 
   private String scriptContent;

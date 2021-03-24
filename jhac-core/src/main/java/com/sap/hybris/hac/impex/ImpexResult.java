@@ -35,8 +35,7 @@ public class ImpexResult implements Result {
     final Iterator<String> iterator = errors.iterator();
     while (iterator.hasNext()) {
       String error = iterator.next();
-      final String firstWord = error.split(" ", 2)[0];
-      if (!Impex.KEY_WORDS.contains(firstWord)) {
+      if (!Impex.startsWithKeyword(error)) {
         continue;
       }
       impexError = new ImpexError(error.contains("#") ? Type.HEADER : Type.DATA);
@@ -45,7 +44,7 @@ public class ImpexResult implements Result {
           impexError.setMessage(error.split("#")[1].trim());
           break;
         case DATA:
-          impexError.setMessage(iterator.next().replaceFirst(",,,,", "").trim());
+          impexError.setMessage(iterator.next().trim());
           break;
         default:
           impexError.setMessage(error);

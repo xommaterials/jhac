@@ -55,9 +55,28 @@ public class ImportExportErrorIT {
                 Impex.builder() //
                     .scriptContent(
                         "UPDATE Product; code[unique = true]\n" //
-                            + "; __this_product_defenitively_does_not_exist__") //
+                            + "; __this_product_definitively_does_not_exist__") //
                     .buildImport());
     assertThat(result.hasError(), is(true));
+    final List<ImpexError> parsedErrors = result.parseErrors();
+    assertThat(parsedErrors, hasSize(1));
+    assertThat(parsedErrors.get(0).getType(), is(Type.DATA));
+  }
+
+  @Test
+  public void linebreaksInData() {
+    final ImpexResult result = //
+        hac() //
+            .impex() //
+            .importData( //
+                Impex.builder() //
+                    .scriptContent(
+                        "UPDATE Product; code[unique = true]; description[lang = en]\n" //
+                            + "; __this_product_definitively_does_not_exist__ ; \"long description\n" //
+                            + "containing linebreaks\"") //
+                    .buildImport());
+    assertThat(result.hasError(), is(true));
+    assertThat(result.getErrors(), hasSize(2));
     final List<ImpexError> parsedErrors = result.parseErrors();
     assertThat(parsedErrors, hasSize(1));
     assertThat(parsedErrors.get(0).getType(), is(Type.DATA));

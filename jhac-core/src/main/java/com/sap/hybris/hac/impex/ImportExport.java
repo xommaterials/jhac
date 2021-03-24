@@ -59,8 +59,27 @@ public class ImportExport extends Base<Impex, ImpexResult> {
   }
 
   private List<String> getError(final Document resultHtml) {
-    return Arrays.stream(resultHtml.select(".impexResult pre").text().split("\n")) //
-        .map(String::trim) //
+    final List<String> rawErrors =
+        Arrays.stream(resultHtml.select(".impexResult pre").text().split("\n")) //
+            .map(String::trim) //
+            .filter(StringUtils::hasLength) //
+            .collect(Collectors.toList());
+    for (int i = 0; i < rawErrors.size(); i++) {
+      final String error = rawErrors.get(i);
+      if (Impex.startsWithKeyword(error)) {
+        continue;
+      }
+      if (!error.startsWith(",")) {
+        // merge with previous error
+        final int previous = i - 1;
+        if (previous < 0) {
+          continue;
+        }
+        rawErrors.set(previous, rawErrors.get(previous) + "\n" + error);
+        rawErrors.set(i, null);
+      }
+    }
+    return rawErrors.stream() //
         .filter(StringUtils::hasLength) //
         .collect(Collectors.toList());
   }
