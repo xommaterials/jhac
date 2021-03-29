@@ -71,9 +71,10 @@ public abstract class Base<REQUEST, RESPONSE> {
     try {
       return retryer.call(() -> execute(request, path, action, requestHeaders, restTemplate));
     } catch (final ExecutionException exception) {
-      throw new RuntimeException(exception);
+      throw new CommunicationException("Execution failed.", request, exception.getCause());
     } catch (final RetryException exception) {
-      throw new CommunicationException("Communication error. Retires failed.", request, exception);
+      throw new CommunicationException("Retires failed.", request,
+          exception.getLastFailedAttempt().getExceptionCause());
     }
   }
 
