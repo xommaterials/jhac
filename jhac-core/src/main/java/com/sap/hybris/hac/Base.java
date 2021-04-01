@@ -38,7 +38,8 @@ public abstract class Base<REQUEST, RESPONSE> {
 
   private static final ObjectMapper MAPPER = new ObjectMapper();
 
-  private final Logger logger = LoggerFactory.getLogger(getClass());
+  protected final Logger logger = LoggerFactory.getLogger(getClass());
+
   private final Configuration configuration;
   private final Class<?> responseType;
 
@@ -107,12 +108,16 @@ public abstract class Base<REQUEST, RESPONSE> {
 
       // extract response
       final RESPONSE result = response.getBody();
-      logger.debug("Result: {}", result);
+      logResult(result);
       return result;
     } catch (final RestClientException exception) {
       throw new CommunicationException(
           String.format("Error while communicating with %s", path), request, exception);
     }
+  }
+
+  protected void logResult(final Object result) {
+    logger.debug("Result: {}", result);
   }
 
   protected RestTemplate prepareRestTemplate(final HttpHeaders requestHeaders, final String path) {
