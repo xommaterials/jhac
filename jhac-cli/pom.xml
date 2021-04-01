@@ -5,7 +5,7 @@
     <!-- The Basics -->
     <artifactId>jhac-cli</artifactId>
     <groupId>com.sap.hybris.hac</groupId>
-    <version>1.0</version>
+    <version>1.1-SNAPSHOT</version>
     <dependencies>
         <!-- hac client -->
         <dependency>
