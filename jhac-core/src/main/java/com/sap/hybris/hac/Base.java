@@ -59,7 +59,7 @@ public abstract class Base<REQUEST, RESPONSE> {
 
   protected RESPONSE execute(final REQUEST request, final String path, final String action)
       throws CommunicationException {
-    logger.debug("Execute {}{}", configuration.getEndpoint(), path);
+    logger.info("Execute {}{}", configuration.getEndpoint(), path);
     logger.debug("Payload: {}", request);
 
     final HttpHeaders requestHeaders = requestHeaders();
@@ -117,6 +117,7 @@ public abstract class Base<REQUEST, RESPONSE> {
   }
 
   protected void logResult(final Object result) {
+    logger.info("Done.");
     logger.debug("Result: {}", result);
   }
 
@@ -142,9 +143,9 @@ public abstract class Base<REQUEST, RESPONSE> {
             String.class);
     final String csrfToken = extractCsrfToken(loginPageResponse);
 
-    logger.debug("    CSRF: {}", csrfToken);
-    logger.debug("    user: {}", configuration.getUsername());
-    logger.debug("password: {}", configuration.getPassword().replaceAll(".", "*"));
+    logger.trace("    CSRF: {}", csrfToken);
+    logger.trace("    user: {}", configuration.getUsername());
+    logger.trace("password: {}", configuration.getPassword().replaceAll(".", "*"));
 
     final MultiValueMap<String, String> loginRequest = new LinkedMultiValueMap<>();
     loginRequest.put("_csrf", singletonList(csrfToken));

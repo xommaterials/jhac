@@ -127,5 +127,6 @@ public class ImportExport extends Base<Impex, ImpexResult> {
     @Override
     protected void logResult(final Object result) {
         // prevent logging raw HTML response
+        logger.info("Done.");
     }
 }
