@@ -5,7 +5,7 @@
     <!-- The Basics -->
     <artifactId>jhac-core</artifactId>
     <groupId>com.sap.hybris.hac</groupId>
-    <version>1.1-SNAPSHOT</version>
+    <version>1.0</version>
     <dependencies>
         <!-- Lombok -->
         <dependency>
