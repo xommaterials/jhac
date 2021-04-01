@@ -24,7 +24,7 @@ public class StatefulRestTemplate extends RestTemplate {
 
   private final CookieStore cookieStore;
 
-  public StatefulRestTemplate() {
+  public StatefulRestTemplate(final int timeout) {
     super();
     try {
       final SSLContextBuilder sslContextBuilder = SSLContextBuilder.create();
@@ -39,9 +39,12 @@ public class StatefulRestTemplate extends RestTemplate {
       final HttpContext httpContext = new BasicHttpContext();
       httpContext.setAttribute(ClientContext.COOKIE_STORE, getCookieStore());
       final StatefulHttpComponentsClientHttpRequestFactory
-          statefulHttpComponentsClientHttpRequestFactory =
+          requestFactory =
               new StatefulHttpComponentsClientHttpRequestFactory(httpClient, httpContext);
-      super.setRequestFactory(statefulHttpComponentsClientHttpRequestFactory);
+      requestFactory.setReadTimeout(timeout);
+      requestFactory.setConnectTimeout(timeout);
+
+      super.setRequestFactory(requestFactory);
     } catch (final Exception exception) {
       throw new RuntimeException(exception);
     }

@@ -37,7 +37,7 @@ public class HybrisAdministrationConsole {
           .query(
               FlexibleSearchQuery.builder()
                   .flexibleSearchQuery( //
-                      "SELECT * " //
+                      "SELECT { PK } " //
                           + "FROM { Product } " //
                           + "WHERE 0 = 1") //
                   .build());

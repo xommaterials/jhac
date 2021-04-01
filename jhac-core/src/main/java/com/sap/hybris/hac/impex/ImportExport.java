@@ -16,6 +16,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 import static java.util.Collections.emptyList;
 
@@ -36,25 +37,25 @@ public class ImportExport extends Base<Impex, ImpexResult> {
 
   public ImpexResult importData(final Impex... impexes) throws CommunicationException {
     final List<String> errors = new ArrayList<>();
-    for (final Impex impex : impexes) {
-      final Object result = execute(impex, PATH + IMPORT, "");
-      final String asString = result.toString();
-      final Document resultHtml = Jsoup.parse(asString);
-
-      final List<String> communicationErrors =
-          resultHtml.select(".error").stream() //
-              .map(Element::text) //
-              .collect(Collectors.toList());
-      if (!communicationErrors.isEmpty()) {
-        throw new CommunicationException(String.join("\n", communicationErrors), impex, null);
-      }
-
-      final List<String> error = getError(resultHtml);
-      if (!StringUtils.isEmpty(error)) {
-        errors.addAll(error);
-      }
-    }
-
+    Arrays.stream(impexes)
+        .forEach(
+            impex -> {
+              final Object result = execute(impex, PATH + IMPORT, "");
+              final String asString = result.toString();
+              final Document resultHtml = Jsoup.parse(asString);
+              final List<String> communicationErrors =
+                  resultHtml.select(".error").stream() //
+                      .map(Element::text) //
+                      .collect(Collectors.toList());
+              if (!communicationErrors.isEmpty()) {
+                throw new CommunicationException(
+                    String.join("\n", communicationErrors), impex, null);
+              }
+              final List<String> error = getError(resultHtml);
+              if (!StringUtils.isEmpty(error)) {
+                errors.addAll(error);
+              }
+            });
     return new ImpexResult(errors, emptyList());
   }
 
@@ -64,21 +65,23 @@ public class ImportExport extends Base<Impex, ImpexResult> {
             .map(String::trim) //
             .filter(StringUtils::hasLength) //
             .collect(Collectors.toList());
-    for (int i = 0; i < rawErrors.size(); i++) {
-      final String error = rawErrors.get(i);
-      if (Impex.startsWithKeyword(error)) {
-        continue;
-      }
-      if (!error.startsWith(",")) {
-        // merge with previous error
-        final int previous = i - 1;
-        if (previous < 0) {
-          continue;
-        }
-        rawErrors.set(previous, rawErrors.get(previous) + "\n" + error);
-        rawErrors.set(i, null);
-      }
-    }
+    IntStream.range(0, rawErrors.size())
+        .forEach(
+            i -> {
+              final String error = rawErrors.get(i);
+              if (Impex.startsWithKeyword(error)) {
+                return;
+              }
+              if (!error.startsWith(",")) {
+                // merge with previous error
+                final int previous = i - 1;
+                if (previous < 0) {
+                  return;
+                }
+                rawErrors.set(previous, rawErrors.get(previous) + "\n" + error);
+                rawErrors.set(i, null);
+              }
+            });
     return rawErrors.stream() //
         .filter(StringUtils::hasLength) //
         .collect(Collectors.toList());

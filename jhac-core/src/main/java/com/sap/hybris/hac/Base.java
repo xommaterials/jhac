@@ -58,7 +58,8 @@ public abstract class Base<REQUEST, RESPONSE> {
 
   protected RESPONSE execute(final REQUEST request, final String path, final String action)
       throws CommunicationException {
-    logger.debug("Execute {}{}: {}", configuration.getEndpoint(), path, request);
+    logger.debug("Execute {}{}", configuration.getEndpoint(), path);
+    logger.debug("Payload: {}", request);
 
     final HttpHeaders requestHeaders = requestHeaders();
     final RestTemplate restTemplate = prepareRestTemplate(requestHeaders, path);
@@ -73,8 +74,8 @@ public abstract class Base<REQUEST, RESPONSE> {
     } catch (final ExecutionException exception) {
       throw new CommunicationException("Execution failed.", request, exception.getCause());
     } catch (final RetryException exception) {
-      throw new CommunicationException("Retires failed.", request,
-          exception.getLastFailedAttempt().getExceptionCause());
+      throw new CommunicationException(
+          "Retires failed.", request, exception.getLastFailedAttempt().getExceptionCause());
     }
   }
 
@@ -115,7 +116,7 @@ public abstract class Base<REQUEST, RESPONSE> {
   }
 
   protected RestTemplate prepareRestTemplate(final HttpHeaders requestHeaders, final String path) {
-    final RestTemplate restTemplate = new StatefulRestTemplate();
+    final RestTemplate restTemplate = new StatefulRestTemplate(configuration.getTimeout());
     authenticate(restTemplate);
 
     final String url = configuration.getEndpoint() + "/console" + path;
