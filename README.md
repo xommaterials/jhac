@@ -103,6 +103,10 @@ hac()
 ```
 
 Exported data can be accessed via `impexResult.getExportResources()`.
+ExportResources are a List of byte arrays which is the byte content of a ZIP file.
+Write all byte arrays into a file and you will have a ZIP file containing 2 files:
+A CSV file with the expected impex csv rows with a simple (non-impex) header line starting with #
+and the data rows (without leading ; unlike impex csv rows)
 
 ## Maven dependency
 
@@ -120,7 +124,7 @@ Exported data can be accessed via `impexResult.getExportResources()`.
     <dependency>
         <groupId>com.github.klaushauschild1984.jhac</groupId>
         <artifactId>jhac-core</artifactId>
-        <version>1.0-alpha.3</version>
+        <version>1.0</version>
     </dependency>
 </dependencies>
 ```
