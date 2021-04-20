@@ -171,7 +171,7 @@ public abstract class Base<REQUEST, RESPONSE> {
     return csrfInputs.first().val();
   }
 
-  private HttpHeaders requestHeaders() {
+  protected HttpHeaders requestHeaders() {
     final HttpHeaders requestHeaders = new HttpHeaders();
     requestHeaders.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
     final Credentials htaccess = configuration.getHtaccess();
