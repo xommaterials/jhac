@@ -104,8 +104,8 @@ public class ImportExport extends Base<Impex, ImpexResult> {
         resultHtml.select("#downloadExportResultData a").stream()
             .map(element -> element.attr("href"))
             .collect(Collectors.toList());
-
-    final RestTemplate restTemplate = prepareRestTemplate(new HttpHeaders(), PATH + EXPORT);
+    final HttpHeaders requestHeaders = requestHeaders();
+    final RestTemplate restTemplate = prepareRestTemplate(requestHeaders, PATH + EXPORT);
     final List<byte[]> exportResources =
         exportResourceNames.stream()
             .map(
@@ -114,7 +114,7 @@ public class ImportExport extends Base<Impex, ImpexResult> {
                         .exchange(
                             configuration().getEndpoint() + PATH + "/" + exportResourceName,
                             HttpMethod.GET,
-                            new HttpEntity<>(new HttpHeaders()),
+                            new HttpEntity<>(requestHeaders),
                             byte[].class)
                         .getBody())
             .collect(Collectors.toList());
