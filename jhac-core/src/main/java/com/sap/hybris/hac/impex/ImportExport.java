@@ -56,9 +56,9 @@ public class ImportExport extends Base<Impex, ImpexResult> {
                 errors.addAll(error);
               }
             });
-      final ImpexResult impexResult = new ImpexResult(errors, emptyList());
-      logger.debug("Result: {}", impexResult);
-      return impexResult;
+    final ImpexResult impexResult = new ImpexResult(errors, emptyList());
+    logger.debug("Result: {}", impexResult);
+    return impexResult;
   }
 
   private List<String> getError(final Document resultHtml) {
@@ -119,14 +119,14 @@ public class ImportExport extends Base<Impex, ImpexResult> {
                         .getBody())
             .collect(Collectors.toList());
 
-      final ImpexResult impexResult = new ImpexResult(emptyList(), exportResources);
-      logger.debug("Result: {}", impexResult);
-      return impexResult;
+    final ImpexResult impexResult = new ImpexResult(emptyList(), exportResources);
+    logger.debug("Result: {}", impexResult);
+    return impexResult;
   }
 
-    @Override
-    protected void logResult(final Object result) {
-        // prevent logging raw HTML response
-        logger.info("Done.");
-    }
+  @Override
+  protected void logResult(final Object result) {
+    // prevent logging raw HTML response
+    logger.info("Done.");
+  }
 }

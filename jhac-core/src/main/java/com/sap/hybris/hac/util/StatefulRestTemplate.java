@@ -38,9 +38,8 @@ public class StatefulRestTemplate extends RestTemplate {
       cookieStore = new BasicCookieStore();
       final HttpContext httpContext = new BasicHttpContext();
       httpContext.setAttribute(ClientContext.COOKIE_STORE, getCookieStore());
-      final StatefulHttpComponentsClientHttpRequestFactory
-          requestFactory =
-              new StatefulHttpComponentsClientHttpRequestFactory(httpClient, httpContext);
+      final StatefulHttpComponentsClientHttpRequestFactory requestFactory =
+          new StatefulHttpComponentsClientHttpRequestFactory(httpClient, httpContext);
       requestFactory.setReadTimeout(timeout);
       requestFactory.setConnectTimeout(timeout);
 

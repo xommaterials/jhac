@@ -1,7 +1,6 @@
 package com.sap.hybris.hac.impex.chunk;
 
 import com.sap.hybris.hac.impex.Impex;
-
 import java.util.function.Function;
 
 /**
